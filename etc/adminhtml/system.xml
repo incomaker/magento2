@@ -1,0 +1,28 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="incomaker" translate="label" sortOrder="400">
+            <label>Incomaker</label>
+        </tab>
+        <section id="config" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <label>Marketing automation with artificial intelligence</label>
+            <tab>incomaker</tab>
+            <resource>Incomaker_Magento2::config</resource>
+            <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Setup</label>
+                <attribute type="expanded">1</attribute>
+                <field id="login" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login</label>
+                    <config_path>incomaker/settings/login</config_path>
+                    <comment>Note: Additional stores must be connected to their own User Account via Store View settings.</comment>
+                </field>
+                <field id="secret" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Password</label>
+                    <config_path>incomaker/settings/password</config_path>
+                </field>
+                <field id="launch_incomaker_button" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" />
+            </group>
+        </section>
+    </system>
+</config>
