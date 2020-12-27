@@ -21,7 +21,9 @@
                     <label>Password</label>
                     <config_path>incomaker/settings/password</config_path>
                 </field>
-                <field id="launch_incomaker_button" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" />
+                <field id="launch_incomaker_button" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" >
+                    <label>Connect</label>
+                </field>
             </group>
         </section>
     </system>
