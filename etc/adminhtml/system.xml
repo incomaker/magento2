@@ -22,7 +22,7 @@
                     <config_path>incomaker/settings/password</config_path>
                 </field>
                 <field id="launch_incomaker_button" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" >
-                    <label>Connect</label>
+                    <frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ConnectButton</frontend_model>
                 </field>
             </group>
         </section>
