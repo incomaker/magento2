@@ -12,17 +12,10 @@
             <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Setup</label>
                 <attribute type="expanded">1</attribute>
-                <field id="login" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Login</label>
-                    <config_path>incomaker/settings/login</config_path>
+                <field id="apikey" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API Key</label>
+                    <config_path>incomaker/settings/apikey</config_path>
                     <comment>Note: Additional stores must be connected to their own User Account via Store View settings.</comment>
-                </field>
-                <field id="secret" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Password</label>
-                    <config_path>incomaker/settings/password</config_path>
-                </field>
-                <field id="launch_incomaker_button" type="button" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" >
-                    <frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ConnectButton</frontend_model>
                 </field>
             </group>
         </section>
