@@ -3,7 +3,7 @@ namespace Incomaker\Magento2\Controller\Feed;
 
 use Magento\Framework\UrlFactory;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Feed extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
