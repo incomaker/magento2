@@ -12,9 +12,9 @@
             <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Setup</label>
                 <attribute type="expanded">1</attribute>
-                <field id="apikey" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>API Key</label>
-                    <config_path>incomaker/settings/apikey</config_path>
+                    <config_path>incomaker/settings/api_key</config_path>
                     <comment>Note: Additional stores must be connected to their own User Account via Store View settings.</comment>
                 </field>
             </group>
