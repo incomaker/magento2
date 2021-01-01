@@ -1,5 +1,5 @@
 <?php
-namespace Incomaker\Magento2\Controller\Feed;
+namespace Incomaker\Magento2\Controller\Data;
 
 use Magento\Framework\UrlFactory;
 
