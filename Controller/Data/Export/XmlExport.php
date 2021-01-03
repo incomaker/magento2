@@ -40,7 +40,7 @@ abstract class XmlExport {
 
     public function setApiKey($apiKey)
     {
-        if (!isset($apiKey) || ($apiKey != Configuration::get(IncomakerLibrary\IncomakerCore\Core::INCOMAKER_API_KEY))) {
+        if (!isset($apiKey)) {
             throw new UnexpectedValueException();
         }
     }
@@ -101,5 +101,15 @@ abstract class XmlExport {
         }
 
         $this->since = $since;
+    }
+
+
+    public function createXmlFeed()
+    {
+        $this->xml->addAttribute('totalItems', $this->itemsCount());
+
+//        $this->numberOfLanguages = count(Language::getLanguages(false, Shop::getContextShopID(), true));
+//        $this->shopId = Shop::getContextShopID();
+//        $this->shopId = Shop::getContextShopID();
     }
 }
