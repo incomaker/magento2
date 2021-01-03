@@ -10,19 +10,20 @@ class Feed extends \Magento\Framework\App\Action\Action
 
     protected $scopeConfig;
     protected $resultRawFactory;
-    protected $exports;
+    protected $manager;
 
     protected $xmlExport;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Incomaker\Magento2\Helper\ExportManager $manager
     )
     {
         $this->resultRawFactory = $resultRawFactory;
-        $this->exports[ContactExport::$name] = ContactExport::class;
         $this->scopeConfig = $scopeConfig;
+        $this->manager = $manager;
 
         parent::__construct($context);
     }
@@ -33,7 +34,7 @@ class Feed extends \Magento\Framework\App\Action\Action
         $result = $this->resultRawFactory->create();
 
         try {
-            $xmlExport = new $this->exports[$params["type"]]();
+            $xmlExport = $this->manager->getExport($params["type"]);
         } catch (\Exception $e) {
             $result->setHeader('HTTP/1.0 400 Bad Request');
             $result->setContents("400-1 Invalid command");

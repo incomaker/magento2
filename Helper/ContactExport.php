@@ -1,6 +1,6 @@
 <?php
 
-namespace Incomaker\Magento2\Controller\Data\Export;
+namespace Incomaker\Magento2\Helper;
 
 class ContactExport extends XmlExport {
 
