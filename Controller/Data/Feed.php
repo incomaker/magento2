@@ -36,15 +36,17 @@ class Feed extends \Magento\Framework\App\Action\Action
         try {
             $xmlExport = $this->manager->getExport($params["type"]);
         } catch (\Exception $e) {
-            $result->setHeader('HTTP/1.0 400 Bad Request');
-            $result->setContents("400-1 Invalid command");
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
+            $result->setContents('400-1 Invalid command');
+            return $result;
         }
 
         try {
             $xmlExport->setApiKey($this->scopeConfig->getValue('incomaker/settings/api_key', \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
         } catch (Exception $e) {
-            $result->setHeader('HTTP/1.0 401 Unauthorized');
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED);
             $result->setContents("401-2 Invalid API key");
+            return $result;
         }
 
         try {
@@ -53,15 +55,16 @@ class Feed extends \Magento\Framework\App\Action\Action
             $xmlExport->setId(isset($params["id"]) ? $params["id"] : NULL);
             $xmlExport->setSince(isset($params["since"]) ? $params["since"] : NULL);
         } catch (InvalidArgumentException $e) {
-            $result->setHeader('HTTP/1.0 400 Bad Request');
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
             $result->setContents("400-2 " . $e->getMessage());
+            return $result;
         }
 
         $result->setHeader('Content-Type', 'text/xml');
         try {
             $result->setContents($xmlExport->createXmlFeed());
         } catch (Exception $e) {
-            $result->setHeader('HTTP/1.0 510 Not extended');
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR);
             $result->setContents("510-1 " . $e->getMessage());
         }
 
