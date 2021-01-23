@@ -2,7 +2,7 @@
 
 namespace Incomaker\Magento2\Helper;
 
-class ContactExport extends XmlExport {
+class CategoryExport extends XmlExport {
 
     public static $name = "category";
 
@@ -24,12 +24,12 @@ class ContactExport extends XmlExport {
         parent::createXmlFeed();
 
         foreach ($categoriesCol as $category) {
-            $this->createContactXml($category);
+            $this->createCategoryXml($category);
         }
         return $this->xml->asXML();
     }
 
-    protected function createContactXml(\Magento\Customer\Model\Category $category) {
+    protected function createCategoryXml(\Magento\Customer\Model\Category $category) {
         $childXml = $this->xml->addChild('c');
         $this->addItem($childXml,'clientContactId', $category->getId());
     }
