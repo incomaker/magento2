@@ -94,8 +94,7 @@ abstract class XmlExport {
     public function setSince($since) {
 
         if (isset($since)) {
-            $tempDate = explode('-', $since);
-            if ((count($tempDate) != 3) || !checkdate($tempDate[1], $tempDate[2], $tempDate[0])) {
+            if (!preg_match("/^((((19|[2-9]\d)\d{2})\-(0[13578]|1[02])\-(0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})\-(0[13456789]|1[012])\-(0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})\-02\-(0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))\-02\-29))$/g",$since)) {
                 throw new InvalidArgumentException("Date must be in YYYY-MM-DD format");
             }
         }
@@ -103,10 +102,15 @@ abstract class XmlExport {
         $this->since = $since;
     }
 
+    protected function addItem($object, $id, $item) {
+        if (isset($item)) {
+            return $object->addChild($id, htmlspecialchars($item));
+        }
+    }
 
     public function createXmlFeed()
     {
-        $this->xml->addAttribute('totalItems', $this->itemsCount());
+        $this->xml->addAttribute('totalItems', $this->getItemsCount());
 
 //        $this->numberOfLanguages = count(Language::getLanguages(false, Shop::getContextShopID(), true));
 //        $this->shopId = Shop::getContextShopID();
