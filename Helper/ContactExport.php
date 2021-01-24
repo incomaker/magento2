@@ -7,11 +7,17 @@ class ContactExport extends XmlExport {
     public static $name = "contact";
 
     protected $customers;
+    protected $subscribers;
+
     private $itemsCount;
 
-    public function __construct(\Magento\Customer\Model\Customer $customers) {
+    public function __construct(
+        \Magento\Customer\Model\Customer $customers,
+        \Magento\Newsletter\Model\Subscriber $subscribers) {
+
         $this->xml = new \Magento\Framework\Simplexml\Element('<contacts/>');
         $this->customers = $customers;
+        $this->subscribers = $subscribers;
     }
 
     public function createXmlFeed()
@@ -39,13 +45,15 @@ class ContactExport extends XmlExport {
         $this->addItem($childXml,'lastName', htmlspecialchars($customer->getLastname()));
         $this->addItem($childXml,'email', $customer->getEmail());
         $this->addItem($childXml,'birthday', $customer->getDob());
-        $this->addItem($childXml,'street', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getStreet()));
+        if (isset($customer->getPrimaryAddress('default_billing')->getStreet()[0])) {
+            $this->addItem($childXml,'street', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getStreet()[0]));
+        }
         $this->addItem($childXml,'zipCode', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getPostcode()));
         $this->addItem($childXml,'city', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getCity()));
         $this->addItem($childXml,'phoneNumber1', $customer->getPrimaryAddress('default_billing')->getTelephone());
         $this->addItem($childXml,'phoneNumber2', $customer->getPrimaryAddress('default_billing')->getFax());
         $this->addItem($childXml,'country', strtolower($customer->getPrimaryAddress('default_billing')->getCountryId()));
-        $this->addItem($childXml,'newsletter', $customer->subscriberFactory->create()->loadByCustomerId($customer->getId())->isSubscribed());
+        $this->addItem($childXml,'newsletter', $this->subscribers->loadByCustomerId($customer->getId())->isSubscribed());
         $this->addItem($childXml,'consentTitle', 'Magento');
     }
 

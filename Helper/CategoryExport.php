@@ -29,7 +29,7 @@ class CategoryExport extends XmlExport {
         return $this->xml->asXML();
     }
 
-    protected function createCategoryXml(\Magento\Customer\Model\Category $category) {
+    protected function createCategoryXml(\Magento\Catalog\Helper\Category $category) {
         $childXml = $this->xml->addChild('c');
         $this->addItem($childXml,'clientContactId', $category->getId());
     }
