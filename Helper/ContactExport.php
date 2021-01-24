@@ -53,7 +53,7 @@ class ContactExport extends XmlExport {
         $this->addItem($childXml,'phoneNumber1', $customer->getPrimaryAddress('default_billing')->getTelephone());
         $this->addItem($childXml,'phoneNumber2', $customer->getPrimaryAddress('default_billing')->getFax());
         $this->addItem($childXml,'country', strtolower($customer->getPrimaryAddress('default_billing')->getCountryId()));
-        $this->addItem($childXml,'newsletter', $this->subscribers->loadByCustomerId($customer->getId())->isSubscribed());
+        $this->addItem($childXml,'newsletter', $this->subscribers->loadByCustomerId($customer->getId())->isSubscribed()?1:0);
         $this->addItem($childXml,'consentTitle', 'Magento');
     }
 

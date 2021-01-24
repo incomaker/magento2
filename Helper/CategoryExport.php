@@ -9,16 +9,17 @@ class CategoryExport extends XmlExport {
     protected $categories;
     private $itemsCount;
 
-    public function __construct(\Magento\Catalog\Helper\Category $categories) {
+    public function __construct(
+
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categories) {
         $this->xml = new \Magento\Framework\Simplexml\Element('<categories/>');
         $this->categories = $categories;
     }
 
     public function createXmlFeed()
     {
-        $categoriesCol = $this->categories->getCollection()
-            ->addAttributeToSelect("*")
-            ->load();
+        $categoriesCol = $this->categories->create()
+            ->addAttributeToSelect("*");
         $this->itemsCount = $categoriesCol->count();
 
         parent::createXmlFeed();
