@@ -9,7 +9,7 @@ class CategoryExport extends XmlExport {
     protected $categories;
     private $itemsCount;
 
-    public function __construct(\Magento\Customer\Model\Category $categories) {
+    public function __construct(\Magento\Catalog\Helper\Category $categories) {
         $this->xml = new \Magento\Framework\Simplexml\Element('<categories/>');
         $this->categories = $categories;
     }
