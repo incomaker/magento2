@@ -69,7 +69,7 @@ abstract class XmlExport {
         if (($offset != NULL) && (!ctype_digit($offset))) {
             throw new InvalidArgumentException("Offset must be a number.");
         }
-        $this->offset = $offset;
+        $this->offset = $offset + 1;
         if (empty($this->limit)) {
             $this->limit = self::MAX_LIMIT;
         }
@@ -95,7 +95,7 @@ abstract class XmlExport {
     public function setSince($since) {
 
         if (isset($since)) {
-            if (!preg_match("/^((((19|[2-9]\d)\d{2})\-(0[13578]|1[02])\-(0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})\-(0[13456789]|1[012])\-(0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})\-02\-(0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))\-02\-29))$/g",$since)) {
+            if (!preg_match("/^((((19|[2-9]\d)\d{2})\-(0[13578]|1[02])\-(0[1-9]|[12]\d|3[01]))|(((19|[2-9]\d)\d{2})\-(0[13456789]|1[012])\-(0[1-9]|[12]\d|30))|(((19|[2-9]\d)\d{2})\-02\-(0[1-9]|1\d|2[0-8]))|(((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))\-02\-29))$/",$since)) {
                 throw new InvalidArgumentException("Date must be in YYYY-MM-DD format");
             }
         }

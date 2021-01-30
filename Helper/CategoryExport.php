@@ -29,8 +29,15 @@ class CategoryExport extends XmlExport {
 
         $categoriesCol = $this->categories->create()
             ->addAttributeToSelect("*")
-            ->setStoreId($store->getId())
-            ->load();
+            ->setStoreId($store->getId());
+        if ($this->getId() != NULL) {
+            $categoriesCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
+        } else {
+            if ($this->getSince() != NULL) $categoriesCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            if ($this->getLimit() != NULL) $categoriesCol->setPageSize($this->getLimit());
+            if ($this->getOffset() != NULL) $categoriesCol->setCurPage($this->getOffset());
+        }
+        $categoriesCol->load();
         if (empty($this->itemsCount)) {
             $this->itemsCount = $categoriesCol->count();
         }

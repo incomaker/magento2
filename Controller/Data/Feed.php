@@ -51,9 +51,9 @@ class Feed extends \Magento\Framework\App\Action\Action
 
         try {
             $xmlExport->setLimit(isset($params["limit"]) ? $params["limit"] : NULL);
-            $xmlExport->setOffset(isset($params["offset"]) ? $params["offset"] : NULL);
+            $xmlExport->setOffset(isset($params["offset"]) ? $params["offset"] : NULL); //TODO Offsets higher than the number of items returns bad results
             $xmlExport->setId(isset($params["id"]) ? $params["id"] : NULL);
-            $xmlExport->setSince(isset($params["since"]) ? $params["since"] : NULL);
+            $xmlExport->setSince(isset($params["since"]) ? $params["since"] : NULL);    //TODO Since date format check
         } catch (InvalidArgumentException $e) {
             $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
             $result->setContents("400-2 " . $e->getMessage());
