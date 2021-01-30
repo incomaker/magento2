@@ -76,7 +76,7 @@ class ProductExport extends XmlExport {
 
     protected function createCategoryXml($category) {
         $childXml = $this->xml->addChild('p');
-        $this->addItem($childXml,'productId', $category["productId"]);
+        $childXml->addAttribute("id", $category["productId"]);
         $this->addItem($childXml,'imageUrl', $category["imageUrl"]);
         $this->addItem($childXml,'categories', $category["categories"]);
         $this->addItem($childXml,'price', $category["price"]);

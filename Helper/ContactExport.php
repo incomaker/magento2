@@ -44,7 +44,7 @@ class ContactExport extends XmlExport {
 
     protected function createContactXml(\Magento\Customer\Model\Customer $customer) {
         $childXml = $this->xml->addChild('c');
-        $this->addItem($childXml,'clientContactId', $customer->getId());
+        $childXml->addAttribute("id", $customer->getId());
         $this->addItem($childXml,'sex', strtoupper($customer->getResource()->getAttribute('gender')->getSource()->getOptionText($customer->getData('gender'))));
         $this->addItem($childXml,'language', $customer->getStore()->getLocale());
         $this->addItem($childXml,'companyName', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getCompany()));

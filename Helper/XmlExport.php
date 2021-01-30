@@ -6,7 +6,7 @@ abstract class XmlExport {
 
     const PRODUCT_ATTRIBUTE = 100000;
     const MAX_LIMIT = 1000;
-    const API_VERSION = "2.7";
+    const API_VERSION = "2.8";
 
     public static $name;
 
@@ -113,9 +113,5 @@ abstract class XmlExport {
     {
         $this->xml->addAttribute('version', $this::API_VERSION);
         $this->xml->addAttribute('totalItems', $this->getItemsCount());
-
-//        $this->numberOfLanguages = count(Language::getLanguages(false, Shop::getContextShopID(), true));
-//        $this->shopId = Shop::getContextShopID();
-//        $this->shopId = Shop::getContextShopID();
     }
 }

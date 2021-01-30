@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Incomaker\Magento2\Helper;
-
 
 class ExportManager
 {
@@ -10,7 +8,7 @@ class ExportManager
     protected $exports;
 
     public function __construct(
-        \Incomaker\Magento2\Helper\OrderExport $contactExport,
+        \Incomaker\Magento2\Helper\ContactExport $contactExport,
         \Incomaker\Magento2\Helper\CategoryExport $categoryExport,
         \Incomaker\Magento2\Helper\ProductExport $productExport,
         \Incomaker\Magento2\Helper\OrderExport $orderExport

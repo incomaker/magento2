@@ -2,9 +2,6 @@
 
 namespace Incomaker\Magento2\Helper;
 
-use Magento\Framework\Simplexml\Element;
-use Magento\Newsletter\Model\Subscriber;
-
 class OrderExport extends XmlExport {
 
     public static $name = "order";

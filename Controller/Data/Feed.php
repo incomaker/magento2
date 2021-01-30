@@ -37,7 +37,7 @@ class Feed extends \Magento\Framework\App\Action\Action
             $xmlExport = $this->manager->getExport($params["type"]);
         } catch (\Exception $e) {
             $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
-            $result->setContents('400-1 Invalid command');
+            $result->setContents('400-1 Invalid command '.$e->getMessage());
             return $result;
         }
 
