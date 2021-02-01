@@ -12,10 +12,22 @@
             <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Setup</label>
                 <attribute type="expanded">1</attribute>
-                <field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="module_version" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Module Version</label>
+                    <frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
+                    <comment>Stores could be connected to Incomaker via Website settings.</comment>
+                </field>
+                <field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
                     <label>API Key</label>
                     <config_path>incomaker/settings/api_key</config_path>
-                    <comment>Note: Additional stores must be connected to their own User Account via Store View settings.</comment>
+                </field>
+                <field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Account ID</label>
+                    <config_path>incomaker/settings/account_id</config_path>
+                </field>
+                <field id="plugin_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Plugin ID</label>
+                    <config_path>incomaker/settings/plugin_id</config_path>
                 </field>
             </group>
         </section>

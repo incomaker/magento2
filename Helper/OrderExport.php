@@ -2,6 +2,8 @@
 
 namespace Incomaker\Magento2\Helper;
 
+use Magento\Framework\Simplexml\Element;
+
 class OrderExport extends XmlExport {
 
     public static $name = "order";

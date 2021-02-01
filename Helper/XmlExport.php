@@ -4,7 +4,6 @@ namespace Incomaker\Magento2\Helper;
 
 abstract class XmlExport {
 
-    const PRODUCT_ATTRIBUTE = 100000;
     const MAX_LIMIT = 1000;
     const API_VERSION = "2.8";
 

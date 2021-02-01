@@ -41,9 +41,7 @@ class Feed extends \Magento\Framework\App\Action\Action
             return $result;
         }
 
-        try {
-            $xmlExport->setApiKey($this->scopeConfig->getValue('incomaker/settings/api_key', \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
-        } catch (Exception $e) {
+        if (!isset($params["key"])||$this->scopeConfig->getValue('incomaker/settings/api_key', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE) != $params["key"]) {
             $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_UNAUTHORIZED);
             $result->setContents("401-2 Invalid API key");
             return $result;
