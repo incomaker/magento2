@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "magento/framework": "*",
+    "magento/framework": "*"
   },
   "minimum-stability": "dev",
   "license": [
