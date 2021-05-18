@@ -71,14 +71,13 @@ class CategoryExport extends XmlExport {
     protected function createCategoryXml($category) {
         $childXml = $this->xml->addChild('c');
         $childXml->addAttribute("id", $category["categoryId"]);
-        $this->addItem($childXml,'categoryId', $category["categoryId"]);
         $this->addItem($childXml,'parentCategoryId', $category["parentId"]);
         $languagesXml = $childXml->addChild('languages');
         foreach ($category["lang"] as $locale => $value) {
-            $langXml = $languagesXml->addChild('l');
-            $langXml->addAttribute("lang", $locale);
-            $this->addItem($langXml, "name", $value["name"]);
-            $this->addItem($langXml, "url", $value["url"]);
+            $lXml = $languagesXml->addChild('l');
+            $lXml->addAttribute("lang", $locale);
+            $this->addItem($lXml, "name", $value["name"]);
+            $this->addItem($lXml, "url", $value["url"]);
         }
     }
 
