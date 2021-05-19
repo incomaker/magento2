@@ -51,7 +51,7 @@ class ContactExport extends XmlExport {
         $childXml->addAttribute("id", $customer->getId());
         $this->addItem($childXml,'sex', strtoupper($customer->getResource()->getAttribute('gender')->getSource()->getOptionText($customer->getData('gender'))));
         $this->addItem($childXml,'language', $customer->getStore()->getLocale());
-        $this->addItem($childXml,'companyName', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getCompany()));
+        if ($customer->getDefaultBillingAddress() != false) $this->addItem($childXml,'companyName', htmlspecialchars($customer->getDefaultBillingAddress()->getCompany()));
         $this->addItem($childXml,'firstName', htmlspecialchars($customer->getFirstname()));
         $this->addItem($childXml,'lastName', htmlspecialchars($customer->getLastname()));
         $this->addItem($childXml,'email', $customer->getEmail());
