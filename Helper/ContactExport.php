@@ -48,22 +48,25 @@ class ContactExport extends XmlExport {
 
     protected function createContactXml(\Magento\Customer\Model\Customer $customer) {
         $childXml = $this->xml->addChild('c');
+        $billingAddress = $customer->getDefaultBillingAddress();
         $childXml->addAttribute("id", $customer->getId());
         $this->addItem($childXml,'sex', strtoupper($customer->getResource()->getAttribute('gender')->getSource()->getOptionText($customer->getData('gender'))));
         $this->addItem($childXml,'language', $customer->getStore()->getLocale());
-        if ($customer->getDefaultBillingAddress() != false) $this->addItem($childXml,'companyName', htmlspecialchars($customer->getDefaultBillingAddress()->getCompany()));
         $this->addItem($childXml,'firstName', htmlspecialchars($customer->getFirstname()));
         $this->addItem($childXml,'lastName', htmlspecialchars($customer->getLastname()));
         $this->addItem($childXml,'email', $customer->getEmail());
         $this->addItem($childXml,'birthday', $customer->getDob());
-        if (isset($customer->getPrimaryAddress('default_billing')->getStreet()[0])) {
-            $this->addItem($childXml,'street', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getStreet()[0]));
+        if ($billingAddress != false) {
+            $this->addItem($childXml,'companyName', htmlspecialchars($billingAddress->getCompany()));
+            if (isset($billingAddress->getStreet()[0])) {
+                $this->addItem($childXml,'street', htmlspecialchars($billingAddress->getStreet()[0]));
+            }
+            $this->addItem($childXml,'zipCode', htmlspecialchars($billingAddress->getPostcode()));
+            $this->addItem($childXml,'city', htmlspecialchars($billingAddress->getCity()));
+            $this->addItem($childXml,'phoneNumber1', $billingAddress->getTelephone());
+            $this->addItem($childXml,'phoneNumber2', $billingAddress->getFax());
+            $this->addItem($childXml,'country', strtolower($billingAddress->getCountryId()));
         }
-        $this->addItem($childXml,'zipCode', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getPostcode()));
-        $this->addItem($childXml,'city', htmlspecialchars($customer->getPrimaryAddress('default_billing')->getCity()));
-        $this->addItem($childXml,'phoneNumber1', $customer->getPrimaryAddress('default_billing')->getTelephone());
-        $this->addItem($childXml,'phoneNumber2', $customer->getPrimaryAddress('default_billing')->getFax());
-        $this->addItem($childXml,'country', strtolower($customer->getPrimaryAddress('default_billing')->getCountryId()));
         $this->addItem($childXml,'newsletter', $this->subscribers->loadByCustomerId($customer->getId())->isSubscribed()?1:0);
         $this->addItem($childXml,'consentTitle', 'Magento');
     }

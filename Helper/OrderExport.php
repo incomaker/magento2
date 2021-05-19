@@ -78,7 +78,7 @@ class OrderExport extends XmlExport {
                 $this->addItem($item, "variantId", $itm->getSku());     //Deprecated: will be removed in next version
                 $this->addItem($item, "quantity", $itm->getQtyOrdered());
                 $price = $this->addItem($item, "price", $itm->getPrice());
-                $price->addAttribute("currecy", $order->getOrderCurrencyCode());
+                $price->addAttribute("currency", $order->getOrderCurrencyCode());
             }
         }
     }
