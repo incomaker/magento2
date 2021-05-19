@@ -26,13 +26,17 @@ class ContactExport extends XmlExport {
             ->addAttributeToSelect("*");
         if ($this->getId() != NULL) {
             $customersCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
+            $this->itemsCount = 1;
         } else {
             if ($this->getSince() != NULL) $customersCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            $customersCol->load();
+            $this->itemsCount = $customersCol->count();
+            $customersCol = $this->customers->getCollection()
+                ->addAttributeToSelect("*");
             if ($this->getLimit() != NULL) $customersCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $customersCol->setCurPage($this->getOffset());
         }
         $customersCol->load();
-        $this->itemsCount = $customersCol->count();
 
         parent::createXmlFeed();
 

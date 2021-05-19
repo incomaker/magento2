@@ -32,22 +32,25 @@ class CategoryExport extends XmlExport {
             ->setStoreId($store->getId());
         if ($this->getId() != NULL) {
             $categoriesCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
+            $this->itemsCount = 1;
         } else {
             if ($this->getSince() != NULL) $categoriesCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            $categoriesCol->load();
+            $this->itemsCount = $categoriesCol->count();
+            $categoriesCol = $this->categories->create()
+                ->addAttributeToSelect("*")
+                ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $categoriesCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $categoriesCol->setCurPage($this->getOffset());
         }
         $categoriesCol->load();
-        if (empty($this->itemsCount)) {
-            $this->itemsCount = $categoriesCol->count();
-        }
 
         $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()),0,2);
 
         foreach ($categoriesCol as $category) {
             $this->categoriesTree[$category->getId()]["categoryId"] = $category->getId();
             $this->categoriesTree[$category->getId()]["parentId"] = $category->getParentId();
-            $this->categoriesTree[$category->getId()]["lang"][$localeCode] = [
+            $this->categoriesTree[$category->getId()]["id"][$localeCode] = [
                 "name" => $category->getName(),
                 "url" => $category->getUrl()
             ];
@@ -73,9 +76,9 @@ class CategoryExport extends XmlExport {
         $childXml->addAttribute("id", $category["categoryId"]);
         $this->addItem($childXml,'parentCategoryId', $category["parentId"]);
         $languagesXml = $childXml->addChild('languages');
-        foreach ($category["lang"] as $locale => $value) {
+        foreach ($category["id"] as $locale => $value) {
             $lXml = $languagesXml->addChild('l');
-            $lXml->addAttribute("lang", $locale);
+            $lXml->addAttribute("id", $locale);
             $this->addItem($lXml, "name", $value["name"]);
             $this->addItem($lXml, "url", $value["url"]);
         }

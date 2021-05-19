@@ -40,15 +40,18 @@ class ProductExport extends XmlExport {
 
         if ($this->getId() != NULL) {
             $productsCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
+            $this->itemsCount = 1;
         } else {
             if ($this->getSince() != NULL) $productsCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            $productsCol->load();
+            $this->itemsCount = $productsCol->count();
+            $productsCol = $this->products->create()
+                ->addAttributeToSelect("*")
+                ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $productsCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $productsCol->setCurPage($this->getOffset());
         }
         $productsCol->load();
-        if (empty($this->itemsCount)) {
-            $this->itemsCount = $productsCol->count();
-        }
 
         $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()),0,2);
 
@@ -73,7 +76,7 @@ class ProductExport extends XmlExport {
             $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
             $this->productsTree[$product->getId()]["availability"] = $product->isAvailable();
 
-            $this->productsTree[$product->getId()]["lang"][$localeCode] = [
+            $this->productsTree[$product->getId()]["id"][$localeCode] = [
                 "name" => $product->getName(),
                 "description" => $product->getDescription(),
                 "shortDescription" => $product->getShortDescription(),
@@ -119,13 +122,13 @@ class ProductExport extends XmlExport {
         $this->addItem($childXml,'availability', $product["availability"]);
 
         $languagesXml = $childXml->addChild('languages');
-        foreach ($product["lang"] as $locale => $value) {
+        foreach ($product["id"] as $locale => $value) {
             $lXml = $languagesXml->addChild('l');
-            $lXml->addAttribute("lang", $locale);
+            $lXml->addAttribute("id", $locale);
             $this->addItem($lXml, "name", $value["name"]);
             $this->addItem($lXml, "description", $value["description"]);
             $this->addItem($lXml, "shortDescription", $value["shortDescription"]);
-            $this->addItem($lXml,'url', $value["url"]);
+            $this->addItem($lXml, 'url', $value["url"]);
         }
 
     }

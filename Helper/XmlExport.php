@@ -5,7 +5,7 @@ namespace Incomaker\Magento2\Helper;
 abstract class XmlExport {
 
     const MAX_LIMIT = 1000;
-    const API_VERSION = "2.8";
+    const API_VERSION = "2.9.3";
 
     public static $name;
 

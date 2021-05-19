@@ -26,13 +26,19 @@ class OrderExport extends XmlExport {
             ->addFieldToSelect('*');
         if ($this->getId() != NULL) {
             $ordersCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
+            $this->itemsCount = 1;
         } else {
             if ($this->getSince() != NULL) $ordersCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            $ordersCol->load();
+            $this->itemsCount = $ordersCol->count();
+            $ordersCol = $this->orders
+                ->create()
+                ->addFieldToSelect('*');
             if ($this->getLimit() != NULL) $ordersCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset());
         }
         $ordersCol->load();
-        $this->itemsCount = $ordersCol->count();
+
         parent::createXmlFeed();
 
         foreach ($ordersCol as $order) {
