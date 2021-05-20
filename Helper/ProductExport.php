@@ -112,7 +112,7 @@ class ProductExport extends XmlExport {
         $pXml->addAttribute("currency", $product["currency"]);
         $this->addItem($pXml, "amount", $product["price"]);
         $this->addItem($pXml, "priceAfterDiscount", $product["priceAfterDiscount"]);
-//tags, tax
+                                                                                            //TODO Implement tax and tags
         $purchaseXml = $childXml->addChild('purchase', $product["purchase"]);
         $purchaseXml->addAttribute("currency", $product["currency"]);
 
@@ -130,6 +130,7 @@ class ProductExport extends XmlExport {
             $this->addItem($lXml, "shortDescription", $value["shortDescription"]);
             $this->addItem($lXml, 'url', $value["url"]);
         }
+        $this->addItem($childXml,'productId', $product["productId"]);   //TODO Deprecated: Implement variants
 
     }
 
