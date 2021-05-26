@@ -72,9 +72,9 @@ class ProductExport extends XmlExport {
             $this->productsTree[$product->getId()]["purchase"] = round($product->getCost(),
                 $precision=\Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
             $this->productsTree[$product->getId()]["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
-            $this->productsTree[$product->getId()]["active"] = $product->isSalable();
+            $this->productsTree[$product->getId()]["active"] = ($product->isSalable() == true ? 1 : 0);
             $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
-            $this->productsTree[$product->getId()]["availability"] = $product->isAvailable();
+            $this->productsTree[$product->getId()]["availability"] = ($product->isAvailable() == true ? 1 : 0);
 
             $this->productsTree[$product->getId()]["id"][$localeCode] = [
                 "name" => $product->getName(),
