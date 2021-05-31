@@ -49,7 +49,7 @@ class ProductExport extends XmlExport {
                 ->addAttributeToSelect("*")
                 ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $productsCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $productsCol->setCurPage($this->getOffset());
+            if ($this->getOffset() != NULL) $productsCol->setCurPage($this->getOffset() / $this->getLimit());
         }
         $productsCol->load();
 

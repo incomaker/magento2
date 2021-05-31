@@ -34,7 +34,7 @@ class ContactExport extends XmlExport {
             $customersCol = $this->customers->getCollection()
                 ->addAttributeToSelect("*");
             if ($this->getLimit() != NULL) $customersCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $customersCol->setCurPage($this->getOffset());
+            if ($this->getOffset() != NULL) $customersCol->setCurPage($this->getOffset() / $this->getLimit());
         }
         $customersCol->load();
 

@@ -35,7 +35,7 @@ class OrderExport extends XmlExport {
                 ->create()
                 ->addFieldToSelect('*');
             if ($this->getLimit() != NULL) $ordersCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset());
+            if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset() / $this->getLimit());
         }
         $ordersCol->load();
 
