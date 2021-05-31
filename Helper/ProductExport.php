@@ -2,7 +2,8 @@
 
 namespace Incomaker\Magento2\Helper;
 
-class ProductExport extends XmlExport {
+class ProductExport extends XmlExport
+{
 
     public static $name = "product";
 
@@ -19,7 +20,8 @@ class ProductExport extends XmlExport {
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $products,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry) {
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry)
+    {
 
         $this->xml = new \Magento\Framework\Simplexml\Element('<products/>');
         $this->products = $products;
@@ -31,7 +33,8 @@ class ProductExport extends XmlExport {
 
     private $productsTree = array();
 
-    public function prepareData(\Magento\Store\Api\Data\StoreInterface $store) {
+    public function prepareData(\Magento\Store\Api\Data\StoreInterface $store)
+    {
 
         $productsCol = $this->products->create()
             ->addAttributeToSelect("*")
@@ -42,7 +45,7 @@ class ProductExport extends XmlExport {
             $productsCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
             $this->itemsCount = 1;
         } else {
-            if ($this->getSince() != NULL) $productsCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            if ($this->getSince() != NULL) $productsCol->addFieldToFilter('created_at', array('from' => $this->getSince()));
             $productsCol->load();
             $this->itemsCount = $productsCol->count();
             $productsCol = $this->products->create()
@@ -53,39 +56,38 @@ class ProductExport extends XmlExport {
         }
         $productsCol->load();
 
-        $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()),0,2);
+        $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
 
         foreach ($productsCol as $product) {
             $this->productsTree[$product->getId()]["productId"] = $product->getSku();
             $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_base_image')->getUrl();
 
-            $i=0;
+            $i = 0;
             foreach ($product->getCategoryIds() as $categoryId) {
                 $this->productsTree[$product->getId()]["categories"][$i++] = $categoryId;
             }
 
             $this->productsTree[$product->getId()]["currency"] = $baseCurrencyCode;
             $this->productsTree[$product->getId()]["price"] = round($product->getPrice(),
-                $precision=\Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+                $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
             $this->productsTree[$product->getId()]["priceAfterDiscount"] = round($product->getSpecialPrice(),
-                $precision=\Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
             $this->productsTree[$product->getId()]["purchase"] = round($product->getCost(),
-                $precision=\Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+                $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
             $this->productsTree[$product->getId()]["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
             $this->productsTree[$product->getId()]["active"] = ($product->isSalable() == true ? 1 : 0);
             $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
             $this->productsTree[$product->getId()]["availability"] = ($product->isAvailable() == true ? 1 : 0);
 
-            $this->productsTree[$product->getId()]["id"][$localeCode] = [
-                "name" => $product->getName(),
+            $this->productsTree[$product->getId()]["id"][$localeCode] = ["name" => $product->getName(),
                 "description" => $product->getDescription(),
                 "shortDescription" => $product->getShortDescription(),
-                "url" => $product->getProductUrl()
-            ];
+                "url" => $product->getProductUrl()];
         }
     }
 
-    public function createXmlFeed()
+    public
+    function createXmlFeed()
     {
         $storesCol = $this->storeManager->getGroup()->getStores();  //TODO Bind store to palp
         foreach ($storesCol as $store) {
@@ -99,10 +101,12 @@ class ProductExport extends XmlExport {
         return $this->xml->asXML();
     }
 
-    protected function createProductXml($product) {
+    protected
+    function createProductXml($product)
+    {
         $childXml = $this->xml->addChild('p');
         $childXml->addAttribute("id", $product["productId"]);
-        $this->addItem($childXml,'imageUrl', $product["imageUrl"]);
+        $this->addItem($childXml, 'imageUrl', $product["imageUrl"]);
         $categoriesXml = $childXml->addChild('categories');
         foreach ($product["categories"] as $value) {
             $categoriesXml->addChild('c', $value);
@@ -111,15 +115,17 @@ class ProductExport extends XmlExport {
         $pXml = $pricesXml->addChild('p');
         $pXml->addAttribute("currency", $product["currency"]);
         $this->addItem($pXml, "amount", $product["price"]);
-        $this->addItem($pXml, "priceAfterDiscount", $product["priceAfterDiscount"]);
-                                                                                            //TODO Implement tax and tags
+        if ($product["priceAfterDiscount"] != 0) {
+            $this->addItem($pXml, "priceAfterDiscount", $product["priceAfterDiscount"]);
+        }
+        //TODO Implement tax and tags
         $purchaseXml = $childXml->addChild('purchase', $product["purchase"]);
         $purchaseXml->addAttribute("currency", $product["currency"]);
 
-        $this->addItem($childXml,'stock', $product["stock"]);
-        $this->addItem($childXml,'active', $product["active"]);
-        $this->addItem($childXml,'updated', $product["updated"]);
-        $this->addItem($childXml,'availability', $product["availability"]);
+        $this->addItem($childXml, 'stock', $product["stock"]);
+        $this->addItem($childXml, 'active', $product["active"]);
+        $this->addItem($childXml, 'updated', $product["updated"]);
+        $this->addItem($childXml, 'availability', $product["availability"]);
 
         $languagesXml = $childXml->addChild('languages');
         foreach ($product["id"] as $locale => $value) {
@@ -130,11 +136,13 @@ class ProductExport extends XmlExport {
             $this->addItem($lXml, "shortDescription", $value["shortDescription"]);
             $this->addItem($lXml, 'url', $value["url"]);
         }
-        $this->addItem($childXml,'productId', $product["productId"]);   //TODO Deprecated: Implement variants
+        $this->addItem($childXml, 'productId', $product["productId"]);   //TODO Deprecated: Implement variants
 
     }
 
-    protected function getItemsCount() {
+    protected
+    function getItemsCount()
+    {
         return $this->itemsCount;
     }
 }
