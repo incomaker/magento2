@@ -60,7 +60,7 @@ class ProductExport extends XmlExport
 
         foreach ($productsCol as $product) {
             $this->productsTree[$product->getId()]["productId"] = $product->getSku();
-            $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_base_image')->getUrl();
+            $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl();
 
             $i = 0;
             foreach ($product->getCategoryIds() as $categoryId) {
