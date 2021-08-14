@@ -43,17 +43,20 @@ class CategoryExport extends XmlExport {
             if ($this->getLimit() != NULL) $categoriesCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $categoriesCol->setCurPage($this->getOffset() / $this->getLimit());
         }
-        $categoriesCol->load();
+        if ($categoriesCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
 
-        $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()),0,2);
+            $categoriesCol->load();
 
-        foreach ($categoriesCol as $category) {
-            $this->categoriesTree[$category->getId()]["categoryId"] = $category->getId();
-            $this->categoriesTree[$category->getId()]["parentId"] = $category->getParentId();
-            $this->categoriesTree[$category->getId()]["id"][$localeCode] = [
-                "name" => $category->getName(),
-                "url" => $category->getUrl()
-            ];
+            $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
+
+            foreach ($categoriesCol as $category) {
+                $this->categoriesTree[$category->getId()]["categoryId"] = $category->getId();
+                $this->categoriesTree[$category->getId()]["parentId"] = $category->getParentId();
+                $this->categoriesTree[$category->getId()]["id"][$localeCode] = [
+                    "name" => $category->getName(),
+                    "url" => $category->getUrl()
+                ];
+            }
         }
     }
 

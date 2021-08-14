@@ -54,35 +54,39 @@ class ProductExport extends XmlExport
             if ($this->getLimit() != NULL) $productsCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $productsCol->setCurPage($this->getOffset() / $this->getLimit());
         }
-        $productsCol->load();
 
-        $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
+        if ($productsCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
 
-        foreach ($productsCol as $product) {
-            $this->productsTree[$product->getId()]["productId"] = $product->getSku();
-            $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
+            $productsCol->load();
 
-            $i = 0;
-            foreach ($product->getCategoryIds() as $categoryId) {
-                $this->productsTree[$product->getId()]["categories"][$i++] = $categoryId;
-            }
+            $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
 
-            $this->productsTree[$product->getId()]["currency"] = $baseCurrencyCode;
-            $this->productsTree[$product->getId()]["price"] = round($product->getPrice(),
-                $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-            $this->productsTree[$product->getId()]["priceAfterDiscount"] = round($product->getSpecialPrice(),
+            foreach ($productsCol as $product) {
+                $this->productsTree[$product->getId()]["productId"] = substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+                $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
+
+                $i = 0;
+                foreach ($product->getCategoryIds() as $categoryId) {
+                    $this->productsTree[$product->getId()]["categories"][$i++] = $categoryId;
+                }
+
+                $this->productsTree[$product->getId()]["currency"] = $baseCurrencyCode;
+                $this->productsTree[$product->getId()]["price"] = round($product->getPrice(),
                     $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-            $this->productsTree[$product->getId()]["purchase"] = round($product->getCost(),
-                $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-            $this->productsTree[$product->getId()]["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
-            $this->productsTree[$product->getId()]["active"] = ($product->isSalable() == true ? 1 : 0);
-            $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
-            $this->productsTree[$product->getId()]["availability"] = ($product->isAvailable() == true ? 1 : 0);
+                $this->productsTree[$product->getId()]["priceAfterDiscount"] = round($product->getSpecialPrice(),
+                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+                $this->productsTree[$product->getId()]["purchase"] = round($product->getCost(),
+                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+                $this->productsTree[$product->getId()]["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
+                $this->productsTree[$product->getId()]["active"] = ($product->isSalable() == true ? 1 : 0);
+                $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
+                $this->productsTree[$product->getId()]["availability"] = ($product->isAvailable() == true ? 1 : 0);
 
-            $this->productsTree[$product->getId()]["id"][$localeCode] = ["name" => $product->getName(),
-                "description" => $product->getDescription(),
-                "shortDescription" => $product->getShortDescription(),
-                "url" => $product->getProductUrl()];
+                $this->productsTree[$product->getId()]["id"][$localeCode] = ["name" => $product->getName(),
+                    "description" => $product->getDescription(),
+                    "shortDescription" => $product->getShortDescription(),
+                    "url" => $product->getProductUrl()];
+            }
         }
     }
 
@@ -107,9 +111,11 @@ class ProductExport extends XmlExport
         $childXml = $this->xml->addChild('p');
         $childXml->addAttribute("id", $product["productId"]);
         $this->addItem($childXml, 'imageUrl', $product["imageUrl"]);
-        $categoriesXml = $childXml->addChild('categories');
-        foreach ($product["categories"] as $value) {
-            $categoriesXml->addChild('c', $value);
+        if (isset($product["categories"])) {
+            $categoriesXml = $childXml->addChild('categories');
+            foreach ($product["categories"] as $value) {
+                $categoriesXml->addChild('c', $value);
+            }
         }
         $pricesXml = $childXml->addChild('prices');         //TODO Implement multicurrency
         $pXml = $pricesXml->addChild('p');

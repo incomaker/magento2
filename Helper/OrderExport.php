@@ -4,7 +4,8 @@ namespace Incomaker\Magento2\Helper;
 
 use Magento\Framework\Simplexml\Element;
 
-class OrderExport extends XmlExport {
+class OrderExport extends XmlExport
+{
 
     public static $name = "order";
 
@@ -13,7 +14,8 @@ class OrderExport extends XmlExport {
     private $itemsCount;
 
     public function __construct(
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orders) {
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orders)
+    {
 
         $this->xml = new Element('<orders/>');
         $this->orders = $orders;
@@ -28,7 +30,7 @@ class OrderExport extends XmlExport {
             $ordersCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
             $this->itemsCount = 1;
         } else {
-            if ($this->getSince() != NULL) $ordersCol->addFieldToFilter('created_at',  array('from' => $this->getSince()));
+            if ($this->getSince() != NULL) $ordersCol->addFieldToFilter('created_at', array('from' => $this->getSince()));
             $ordersCol->load();
             $this->itemsCount = $ordersCol->count();
             $ordersCol = $this->orders
@@ -37,22 +39,26 @@ class OrderExport extends XmlExport {
             if ($this->getLimit() != NULL) $ordersCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset() / $this->getLimit());
         }
-        $ordersCol->load();
+        if ($ordersCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
 
-        parent::createXmlFeed();
+            $ordersCol->load();
 
-        foreach ($ordersCol as $order) {
-            $this->createOrderXml($order);
+            parent::createXmlFeed();
+
+            foreach ($ordersCol as $order) {
+                $this->createOrderXml($order);
+            }
         }
         return $this->xml->asXML();
     }
 
-    protected function createOrderXml($order) {
+    protected function createOrderXml($order)
+    {
         $childXml = $this->xml->addChild('o');
-        $childXml->addAttribute("id",$order->getId());
+        $childXml->addAttribute("id", $order->getId());
         if ($order->getCustomerId() == NULL) {
             $contact = $childXml->addChild('contact');
-            $this->addItem($contact,    'firstName', htmlspecialchars($order->getCustomerFirstname()));
+            $this->addItem($contact, 'firstName', htmlspecialchars($order->getCustomerFirstname()));
             $this->addItem($contact, 'lastName', htmlspecialchars($order->getCustomerLastname()));
             $this->addItem($contact, 'email', $order->getCustomerEmail());
             if ($order->getBillingAddress() != null) {
@@ -64,18 +70,18 @@ class OrderExport extends XmlExport {
                 $this->addItem($contact, 'country', strtolower($order->getBillingAddress()->getCountryId()));
             }
         } else {
-            $this->addItem($childXml,'contactId', $order->getCustomerId());
+            $this->addItem($childXml, 'contactId', $order->getCustomerId());
         }
 
-        $this->addItem($childXml,'created', $order->getCreatedAt());
-        $this->addItem($childXml,'state', $order->getState());
+        $this->addItem($childXml, 'created', $order->getCreatedAt());
+        $this->addItem($childXml, 'state', $order->getState());
         $items = $childXml->addChild('items');
         //$order = $this->orderRepository->get($orderId);
         if ($order->getAllItems() != null) {
             foreach ($order->getAllItems() as $itm) {
                 $item = $items->addChild('i');
-                $item->addAttribute("id",$itm->getSku());
-                $this->addItem($item, "variantId", $itm->getSku());     //TODO Deprecated: will be removed in next version
+                $item->addAttribute("id", substr($itm->getSku(),0,self::MAX_PRODUCT_ID_LENGTH));
+                $this->addItem($item, "variantId", substr($itm->getSku(),0,self::MAX_PRODUCT_ID_LENGTH));     //TODO Deprecated: will be removed in next version
                 $this->addItem($item, "quantity", $itm->getQtyOrdered());
                 $price = $this->addItem($item, "price", $itm->getPrice());
                 $price->addAttribute("currency", $order->getOrderCurrencyCode());
@@ -83,7 +89,8 @@ class OrderExport extends XmlExport {
         }
     }
 
-    protected function getItemsCount() {
+    protected function getItemsCount()
+    {
         return $this->itemsCount;
     }
 }

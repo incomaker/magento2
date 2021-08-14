@@ -36,6 +36,6 @@ class ModuleVersion extends Field
 
     public function getModuleVersion()
     {
-        return "0.8.12";
+        return "0.8.13";
     }
 }
