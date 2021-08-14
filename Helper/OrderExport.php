@@ -39,11 +39,11 @@ class OrderExport extends XmlExport
             if ($this->getLimit() != NULL) $ordersCol->setPageSize($this->getLimit());
             if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset() / $this->getLimit());
         }
+        $ordersCol->load();
+
+        parent::createXmlFeed();
+
         if ($ordersCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
-
-            $ordersCol->load();
-
-            parent::createXmlFeed();
 
             foreach ($ordersCol as $order) {
                 $this->createOrderXml($order);
@@ -80,8 +80,8 @@ class OrderExport extends XmlExport
         if ($order->getAllItems() != null) {
             foreach ($order->getAllItems() as $itm) {
                 $item = $items->addChild('i');
-                $item->addAttribute("id", substr($itm->getSku(),0,self::MAX_PRODUCT_ID_LENGTH));
-                $this->addItem($item, "variantId", substr($itm->getSku(),0,self::MAX_PRODUCT_ID_LENGTH));     //TODO Deprecated: will be removed in next version
+                $item->addAttribute("id", substr($itm->getSku(), 0, self::MAX_PRODUCT_ID_LENGTH));
+                $this->addItem($item, "variantId", substr($itm->getSku(), 0, self::MAX_PRODUCT_ID_LENGTH));     //TODO Deprecated: will be removed in next version
                 $this->addItem($item, "quantity", $itm->getQtyOrdered());
                 $price = $this->addItem($item, "price", $itm->getPrice());
                 $price->addAttribute("currency", $order->getOrderCurrencyCode());
