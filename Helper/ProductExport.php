@@ -62,7 +62,7 @@ class ProductExport extends XmlExport
             $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
 
             foreach ($productsCol as $product) {
-                $this->productsTree[$product->getId()]["productId"] = substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+                $this->productsTree[$product->getId()]["productId"] = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
                 $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
 
                 $i = 0;
