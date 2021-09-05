@@ -11,7 +11,7 @@
   ],
   "require": {
     "magento/framework": "*",
-    "incomaker/api": "2.1^"
+    "incomaker/api": "^2.1"
   },
   "license": [
     "proprietary"
