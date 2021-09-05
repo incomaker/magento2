@@ -10,9 +10,9 @@
     }
   ],
   "require": {
-    "magento/framework": "*"
+    "magento/framework": "*",
+    "incomaker/api": "2.1^"
   },
-  "minimum-stability": "dev",
   "license": [
     "proprietary"
   ],
