@@ -21,9 +21,9 @@ class ContactRegistration implements ObserverInterface
         $this->proxyDeferredFactory->create(
             [
                 'deferred' => new CallbackDeferred(
-                    function () {
-                        $this->incomakerApi->addContact();
-                        $this->incomakerApi->callEvent();
+                    function () use ($customer) {
+                        $this->incomakerApi->addContact($customer);
+                        $this->incomakerApi->postEvent("register", $customer);
                     }
                 )
             ]
