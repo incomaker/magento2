@@ -1,6 +1,5 @@
 {
   "name": "incomaker/magento2",
-  "version": "0.9.1",
   "description": "Marketing automation with artificial intelligence",
   "type": "magento2-module",
   "authors": [
@@ -10,7 +9,6 @@
     }
   ],
   "require": {
-    "magento/framework": "*",
     "incomaker/api": "^2.1"
   },
   "license": [
@@ -21,7 +19,8 @@
       "registration.php"
     ],
     "psr-4": {
-      "Incomaker\\Magento2\\": ""
+      "Incomaker\\Magento2\\": "",
+      "Incomaker\\Api\\": ""
     }
   }
 }

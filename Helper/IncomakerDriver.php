@@ -2,9 +2,8 @@
 namespace Incomaker\Magento2\Helper;
 
 use Incomaker\Api\Connector;
-use Incomaker\Api\DriverInterface;
 
-class IncomakerDriver implements DriverInterface
+class IncomakerDriver implements \Incomaker\Api\DriverInterface
 {
     private $value;
 
