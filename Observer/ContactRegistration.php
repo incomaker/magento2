@@ -18,9 +18,7 @@ class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer) {
 
         $customer = $observer->getData('customer');
-        $this->incomakerApi->addContact($customer);
-        $this->incomakerApi->postEvent("register", $customer);
-/*        $this->proxyDeferredFactory->create(
+        $this->proxyDeferredFactory->create(
             [
                 'deferred' => new CallbackDeferred(
                     function () use ($customer) {
@@ -29,6 +27,6 @@ class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
                     }
                 )
             ]
-        );*/
+        );
     }
 }
