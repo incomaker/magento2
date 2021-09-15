@@ -11,9 +11,9 @@ class IncomakerDriver implements \Incomaker\Api\DriverInterface
         Configuration $configuration
     )
     {
-        $value[Connector::INCOMAKER_API_KEY] = $configuration->getConfig('incomaker/settings/api_key');
-        $value[Connector::INCOMAKER_ACCOUNT_ID] = $configuration->getConfig('incomaker/settings/account_id');
-        $value[Connector::INCOMAKER_PLUGIN_ID] = $configuration->getConfig('incomaker/settings/plugin_id');
+        $this->value[Connector::INCOMAKER_API_KEY] = $configuration->getConfig('incomaker/settings/api_key');
+        $this->value[Connector::INCOMAKER_ACCOUNT_ID] = $configuration->getConfig('incomaker/settings/account_id');
+        $this->value[Connector::INCOMAKER_PLUGIN_ID] = $configuration->getConfig('incomaker/settings/plugin_id');
     }
 
     public function getSetting($key) {

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_register_success">
+        <observer name="contactRegistration" instance="Incomaker\Magento2\Observer\ContactRegistration" />
+    </event>
+    <event name="customer_login">
+        <observer name="contactLogin" instance="Incomaker\Magento2\Observer\ContactLogin" />
+    </event>
+    <event name="customer_logout">
+        <observer name="contactLogout" instance="Incomaker\Magento2\Observer\ContactLogout" />
+    </event>
+    <event name="checkout_cart_add_product_complete">
+        <observer name="cartUpdate" instance="Incomaker\Magento2\Observer\CartUpdate" />
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="cartUpdate" instance="Incomaker\Magento2\Observer\CartUpdate" />
+    </event>
+    <event name="sales_order_save_after">
+        <observer name="orderAdd" instance="Incomaker\Magento2\Observer\OrderAdd" />
+    </event>
+</config>

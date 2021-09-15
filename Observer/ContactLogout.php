@@ -3,7 +3,7 @@ namespace Incomaker\Magento2\Observer;
 
 use Magento\Framework\Async\CallbackDeferred;
 
-class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
+class ContactLogout implements \Magento\Framework\Event\ObserverInterface
 {
 
     private $incomakerApi;
@@ -11,7 +11,7 @@ class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
 
     public function __construct(
         \Incomaker\Magento2\Helper\IncomakerApi $incomakerApi,
-        ContactRegistration\ProxyDeferredFactory $callResultFactory
+        ContactLogout\ProxyDeferredFactory $callResultFactory
     ) {
         $this->incomakerApi = $incomakerApi;
         $this->proxyDeferredFactory = $callResultFactory ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);;
@@ -20,7 +20,6 @@ class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer) {
 
         $customer = $observer->getData('customer');
-        $this->incomakerApi->addContact($customer);
-        $this->incomakerApi->postEvent("register", $customer);
+        $this->incomakerApi->postEvent("logout", $customer);
     }
 }
