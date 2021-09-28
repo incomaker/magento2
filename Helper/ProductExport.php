@@ -12,6 +12,8 @@ class ProductExport extends XmlExport
     protected $scopeConfig;
     protected $imageHelper;
     protected $stockRegistry;
+    protected $productRepository;
+    protected $configure;
 
     private $itemsCount;
 
@@ -20,7 +22,9 @@ class ProductExport extends XmlExport
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $products,
         \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry)
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configure)
     {
 
         $this->xml = new \Magento\Framework\Simplexml\Element('<products/>');
@@ -29,9 +33,14 @@ class ProductExport extends XmlExport
         $this->scopeConfig = $scopeConfig;
         $this->imageHelper = $imageHelper;
         $this->stockRegistry = $stockRegistry;
+        $this->productRepository = $productRepository;
+        $this->configure = $configure;
     }
 
     private $productsTree = array();
+    private $baseCurrencyCode;
+    private $localeCode;
+    private $skuCache = array();
 
     public function prepareData(\Magento\Store\Api\Data\StoreInterface $store)
     {
@@ -39,7 +48,7 @@ class ProductExport extends XmlExport
         $productsCol = $this->products->create()
             ->addAttributeToSelect("*")
             ->setStoreId($store->getId());
-        $baseCurrencyCode = $store->getBaseCurrency()->getCode();
+        $this->baseCurrencyCode = $store->getBaseCurrency()->getCode();
 
         if ($this->getId() != NULL) {
             $productsCol->addAttributeToFilter('entity_id', array('eq' => $this->getId()));
@@ -52,42 +61,66 @@ class ProductExport extends XmlExport
                 ->addAttributeToSelect("*")
                 ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $productsCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $productsCol->setCurPage($this->getOffset() / $this->getLimit());
+            if ($this->getOffset() != NULL) $productsCol->setCurPage(($this->getOffset() / $this->getLimit())+1);
         }
 
-        if ($productsCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
+        if ($productsCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit())+1) {
 
             $productsCol->load();
 
-            $localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
+            $this->localeCode = substr($this->scopeConfig->getValue('general/locale/code', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store->getStoreId()), 0, 2);
 
             foreach ($productsCol as $product) {
-                $this->productsTree[$product->getId()]["productId"] = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
-                $this->productsTree[$product->getId()]["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
-
-                $i = 0;
-                foreach ($product->getCategoryIds() as $categoryId) {
-                    $this->productsTree[$product->getId()]["categories"][$i++] = $categoryId;
-                }
-
-                $this->productsTree[$product->getId()]["currency"] = $baseCurrencyCode;
-                $this->productsTree[$product->getId()]["price"] = round($product->getPrice(),
-                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-                $this->productsTree[$product->getId()]["priceAfterDiscount"] = round($product->getSpecialPrice(),
-                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-                $this->productsTree[$product->getId()]["purchase"] = round($product->getCost(),
-                    $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-                $this->productsTree[$product->getId()]["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
-                $this->productsTree[$product->getId()]["active"] = ($product->isSalable() == true ? 1 : 0);
-                $this->productsTree[$product->getId()]["updated"] = $product->getCreatedAt();
-                $this->productsTree[$product->getId()]["availability"] = ($product->isAvailable() == true ? 1 : 0);
-
-                $this->productsTree[$product->getId()]["id"][$localeCode] = ["name" => $product->getName(),
-                    "description" => $product->getDescription(),
-                    "shortDescription" => $product->getShortDescription(),
-                    "url" => $product->getProductUrl()];
+                $this->addToProducTree($product);
             }
         }
+    }
+
+    protected function getSkuFromCache($productId) {
+
+        if (!isset($this->skuCache[$productId])) {
+            $this->skuCache[$productId] = $this->productRepository->getById($productId);
+        }
+        return $this->skuCache[$productId];
+    }
+
+    private function addToProducTree($product) {
+
+        $masterProduct = $this->configure->getParentIdsByChild($product->getId());
+
+        if (!empty($masterProduct) && !empty($masterProduct[0])) {
+            $masterSku = mb_substr($this->getSkuFromCache($masterProduct[0])->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+        } else {
+            $masterSku = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+        }
+
+        $prod = &$this->productsTree[$product->getId()];
+
+        $prod["variantId"] = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+        $prod["productId"] = $masterSku;
+        $prod["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
+
+        $i = 0;
+        foreach ($product->getCategoryIds() as $categoryId) {
+            $prod["categories"][$i++] = $categoryId;
+        }
+
+        $prod["currency"] = $this->baseCurrencyCode;
+        $prod["price"] = round($product->getPrice(),
+            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["priceAfterDiscount"] = round($product->getSpecialPrice(),
+            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["purchase"] = round($product->getCost(),
+            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
+        $prod["active"] = ($product->isSalable() == true ? 1 : 0);
+        $prod["updated"] = $product->getCreatedAt();
+        $prod["availability"] = ($product->isAvailable() == true ? 1 : 0);
+
+        $prod["id"][$this->localeCode] = ["name" => $product->getName(),
+            "description" => $product->getDescription(),
+            "shortDescription" => $product->getShortDescription(),
+            "url" => $product->getProductUrl()];
     }
 
     public
@@ -109,7 +142,7 @@ class ProductExport extends XmlExport
     function createProductXml($product)
     {
         $childXml = $this->xml->addChild('p');
-        $childXml->addAttribute("id", $product["productId"]);
+        $childXml->addAttribute("id", $product["variantId"]);
         $this->addItem($childXml, 'imageUrl', $product["imageUrl"]);
         if (isset($product["categories"])) {
             $categoriesXml = $childXml->addChild('categories');

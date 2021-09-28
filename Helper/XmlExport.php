@@ -70,7 +70,7 @@ abstract class XmlExport {
         if (($offset != NULL) && (!ctype_digit($offset))) {
             throw new InvalidArgumentException("Offset must be a number.");
         }
-        $this->offset = $offset + 1;
+        $this->offset = $offset;
         if (empty($this->limit)) {
             $this->limit = self::MAX_LIMIT;
         }

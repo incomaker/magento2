@@ -36,13 +36,13 @@ class ContactExport extends XmlExport
             $customersCol = $this->customers->getCollection()
                 ->addAttributeToSelect("*");
             if ($this->getLimit() != NULL) $customersCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $customersCol->setCurPage($this->getOffset() / $this->getLimit());
+            if ($this->getOffset() != NULL) $customersCol->setCurPage(($this->getOffset() / $this->getLimit())+1);
         }
         $customersCol->load();
 
         parent::createXmlFeed();
 
-        if ($customersCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
+        if ($customersCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit())+1) {
 
             foreach ($customersCol as $customer) {
                 $this->createContactXml($customer);

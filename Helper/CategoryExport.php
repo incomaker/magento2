@@ -41,9 +41,9 @@ class CategoryExport extends XmlExport {
                 ->addAttributeToSelect("*")
                 ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $categoriesCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $categoriesCol->setCurPage($this->getOffset() / $this->getLimit());
+            if ($this->getOffset() != NULL) $categoriesCol->setCurPage(($this->getOffset() / $this->getLimit())+1);
         }
-        if ($categoriesCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
+        if ($categoriesCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit())+1) {
 
             $categoriesCol->load();
 

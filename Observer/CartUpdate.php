@@ -22,7 +22,7 @@ class CartUpdate implements \Magento\Framework\Event\ObserverInterface
         $this->customerSession = $customerSession;
         $this->session = $session;
         $this->cart = $cart;
-        $this->proxyDeferredFactory = $callResultFactory ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);;
+        $this->proxyDeferredFactory = $callResultFactory;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer) {
@@ -33,7 +33,7 @@ class CartUpdate implements \Magento\Framework\Event\ObserverInterface
 
         $new = array();
         foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
-            $new[] = $item['product_id'];
+            $new[] = $item->getSku();
         }
 
         $old = unserialize($this->session->getVariable());

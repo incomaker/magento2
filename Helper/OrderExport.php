@@ -37,13 +37,13 @@ class OrderExport extends XmlExport
                 ->create()
                 ->addFieldToSelect('*');
             if ($this->getLimit() != NULL) $ordersCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $ordersCol->setCurPage($this->getOffset() / $this->getLimit());
+            if ($this->getOffset() != NULL) $ordersCol->setCurPage(($this->getOffset() / $this->getLimit())+1);
         }
         $ordersCol->load();
 
         parent::createXmlFeed();
 
-        if ($ordersCol->getLastPageNumber() >= $this->getOffset() / $this->getLimit()) {
+        if ($ordersCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit())+1) {
 
             foreach ($ordersCol as $order) {
                 $this->createOrderXml($order);

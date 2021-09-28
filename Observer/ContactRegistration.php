@@ -14,7 +14,7 @@ class ContactRegistration implements \Magento\Framework\Event\ObserverInterface
         ContactRegistration\ProxyDeferredFactory $callResultFactory
     ) {
         $this->incomakerApi = $incomakerApi;
-        $this->proxyDeferredFactory = $callResultFactory ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);;
+        $this->proxyDeferredFactory = $callResultFactory;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer) {

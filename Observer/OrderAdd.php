@@ -8,6 +8,7 @@ class OrderAdd implements \Magento\Framework\Event\ObserverInterface
     private $incomakerApi;
     private $session;
     private $cart;
+    private $proxyDeferredFactory;
 
     public function __construct(
         \Incomaker\Magento2\Helper\IncomakerApi $incomakerApi,
@@ -18,6 +19,7 @@ class OrderAdd implements \Magento\Framework\Event\ObserverInterface
         $this->incomakerApi = $incomakerApi;
         $this->session = $session;
         $this->cart = $cart;
+        $this->proxyDeferredFactory = $callResultFactory;
     }
 
     public function execute(\Magento\Framework\Event\Observer $observer) {
