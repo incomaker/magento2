@@ -11,6 +11,7 @@ class ProductExport extends XmlExport
     protected $storeManager;
     protected $scopeConfig;
     protected $imageHelper;
+    protected $imageType;
     protected $stockRegistry;
     protected $productRepository;
     protected $configure;
@@ -18,13 +19,15 @@ class ProductExport extends XmlExport
     private $itemsCount;
 
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface                     $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface             $scopeConfig,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $products,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configure)
+        \Magento\Catalog\Helper\Image                                  $imageHelper,
+        \Magento\CatalogInventory\Api\StockRegistryInterface           $stockRegistry,
+        \Magento\Catalog\Api\ProductRepositoryInterface                $productRepository,
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable   $configure,
+        Configuration                                                  $configuration
+    )
     {
 
         $this->xml = new \Magento\Framework\Simplexml\Element('<products/>');
@@ -35,6 +38,8 @@ class ProductExport extends XmlExport
         $this->stockRegistry = $stockRegistry;
         $this->productRepository = $productRepository;
         $this->configure = $configure;
+
+        $this->imageType = $configuration->getConfig('incomaker/images/image_type', "product_small_image");
     }
 
     private $productsTree = array();
@@ -61,10 +66,10 @@ class ProductExport extends XmlExport
                 ->addAttributeToSelect("*")
                 ->setStoreId($store->getId());
             if ($this->getLimit() != NULL) $productsCol->setPageSize($this->getLimit());
-            if ($this->getOffset() != NULL) $productsCol->setCurPage(($this->getOffset() / $this->getLimit())+1);
+            if ($this->getOffset() != NULL) $productsCol->setCurPage(($this->getOffset() / $this->getLimit()) + 1);
         }
 
-        if ($productsCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit())+1) {
+        if ($productsCol->getLastPageNumber() >= ($this->getOffset() / $this->getLimit()) + 1) {
 
             $productsCol->load();
 
@@ -76,7 +81,8 @@ class ProductExport extends XmlExport
         }
     }
 
-    protected function getSkuFromCache($productId) {
+    protected function getSkuFromCache($productId)
+    {
 
         if (!isset($this->skuCache[$productId])) {
             $this->skuCache[$productId] = $this->productRepository->getById($productId);
@@ -84,21 +90,22 @@ class ProductExport extends XmlExport
         return $this->skuCache[$productId];
     }
 
-    private function addToProducTree($product) {
+    private function addToProducTree($product)
+    {
 
         $masterProduct = $this->configure->getParentIdsByChild($product->getId());
 
         if (!empty($masterProduct) && !empty($masterProduct[0])) {
-            $masterSku = mb_substr($this->getSkuFromCache($masterProduct[0])->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+            $masterSku = mb_substr($this->getSkuFromCache($masterProduct[0])->getSku(), 0, self::MAX_PRODUCT_ID_LENGTH);
         } else {
-            $masterSku = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+            $masterSku = mb_substr($product->getSku(), 0, self::MAX_PRODUCT_ID_LENGTH);
         }
 
         $prod = &$this->productsTree[$product->getId()];
 
-        $prod["variantId"] = mb_substr($product->getSku(),0,self::MAX_PRODUCT_ID_LENGTH);
+        $prod["variantId"] = mb_substr($product->getSku(), 0, self::MAX_PRODUCT_ID_LENGTH);
         $prod["productId"] = $masterSku;
-        $prod["imageUrl"] = $this->imageHelper->init($product, 'product_small_image')->getUrl();
+        $prod["imageUrl"] = $this->imageHelper->init($product, $this->imageType)->getUrl();
 
         $i = 0;
         foreach ($product->getCategoryIds() as $categoryId) {

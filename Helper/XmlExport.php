@@ -16,6 +16,7 @@ abstract class XmlExport {
     protected $offset;
     protected $id;
     protected $since;
+    protected $generate;
 
     protected $numberOfLanguages;
     protected $shopId;
@@ -82,15 +83,21 @@ abstract class XmlExport {
     }
 
     public function setId($id) {
-        if (($id != NULL) && (!ctype_digit($id))) {
-            throw new InvalidArgumentException("Offset must be a number.");
-        }
         $this->id = $id;
     }
 
     public function getSince()
     {
         return $this->since;
+    }
+
+    public function setGenerate($num) {
+        $this->generate = $num;
+    }
+
+    public function getGenerate()
+    {
+        return $this->generate;
     }
 
     public function setSince($since) {

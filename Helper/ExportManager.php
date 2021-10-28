@@ -11,12 +11,14 @@ class ExportManager
         \Incomaker\Magento2\Helper\ContactExport $contactExport,
         \Incomaker\Magento2\Helper\CategoryExport $categoryExport,
         \Incomaker\Magento2\Helper\ProductExport $productExport,
-        \Incomaker\Magento2\Helper\OrderExport $orderExport
+        \Incomaker\Magento2\Helper\OrderExport $orderExport,
+        \Incomaker\Magento2\Helper\CouponExport $couponExport
     ) {
         $this->addExport($contactExport);
         $this->addExport($categoryExport);
         $this->addExport($productExport);
         $this->addExport($orderExport);
+        $this->addExport($couponExport);
     }
 
     protected function addExport(\Incomaker\Magento2\Helper\XmlExport $export) {

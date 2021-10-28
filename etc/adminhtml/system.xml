@@ -30,6 +30,43 @@
                     <config_path>incomaker/settings/plugin_id</config_path>
                 </field>
             </group>
+            <group id="images" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
+                <label>Images</label>
+                <attribute type="expanded">1</attribute>
+                <field id="image_type" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Image type</label>
+                    <comment>Advanced: Size of the product images for exporting. Default is product_small_image.</comment>
+                    <config_path>incomaker/images/image_type</config_path>
+                </field>
+            </group>
+            <group id="auto_generated_coupon_codes" translate="label" showInDefault="0" showInWebsite="1" showInStore="0" sortOrder="10">
+                <label>Auto Generated Specific Coupon Codes</label>
+                <field id="length" translate="label comment" type="text" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Code Length</label>
+                    <comment>Excluding prefix, suffix and separators. Default is 12.</comment>
+                    <frontend_class>validate-digits</frontend_class>
+                    <config_path>incomaker/auto_generated_coupon_codes/length</config_path>
+                </field>
+                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Code Format</label>
+                    <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
+                    <config_path>incomaker/auto_generated_coupon_codes/format</config_path>
+                </field>
+                <field id="prefix" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Code Prefix</label>
+                    <config_path>incomaker/auto_generated_coupon_codes/prefix</config_path>
+                </field>
+                <field id="suffix" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Code Suffix</label>
+                    <config_path>incomaker/auto_generated_coupon_codes/suffix</config_path>
+                </field>
+                <field id="dash" translate="label comment" type="text" sortOrder="50" showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Dash Every X Characters</label>
+                    <comment>If empty no separation.</comment>
+                    <frontend_class>validate-digits</frontend_class>
+                    <config_path>incomaker/auto_generated_coupon_codes/dash</config_path>
+                </field>
+            </group>
         </section>
     </system>
 </config>

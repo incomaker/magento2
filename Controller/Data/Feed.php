@@ -48,6 +48,7 @@ class Feed extends \Magento\Framework\App\Action\Action
         }
 
         try {
+            $xmlExport->setGenerate(isset($params["downloadCount"]) ? $params["downloadCount"] : NULL);
             $xmlExport->setLimit(isset($params["limit"]) ? $params["limit"] : NULL);
             $xmlExport->setOffset(isset($params["offset"]) ? $params["offset"] : NULL); //TODO Offsets higher than the number of items returns bad results
             $xmlExport->setId(isset($params["id"]) ? $params["id"] : NULL);

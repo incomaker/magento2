@@ -1,4 +1,6 @@
 <?php
     $url = "https://dg.incomaker.com/tracking/resources/js/INlib.js?accountUuid=" . $this->helper('Incomaker\Magento2\Helper\Configuration')->getConfig('incomaker/settings/account_id') . "&pluginUuid=" . $this->helper('Incomaker\Magento2\Helper\Configuration')->getConfig('incomaker/settings/plugin_id');
+    $platform = "https://incomaker.b-cdn.net/platforms/magento2.js";
 ?>
+<script type="text/javascript" src="<?php echo "$platform" ?>"></script>
 <script async type="text/javascript" src="<?php echo "$url" ?>"></script>
