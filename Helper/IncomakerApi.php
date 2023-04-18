@@ -41,7 +41,7 @@ class IncomakerApi
         $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
 
         if (isset($customer)) {
-            $event->setContactId($customer->getId());
+            $event->setClientContactId($customer->getId());
         }
         if (!isset($this->eventController)) {
             $this->eventController = $this->incomaker->createEventController();
@@ -54,7 +54,7 @@ class IncomakerApi
         $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
 
         if (isset($customer)) {
-            $event->setContactId($customer->getId());
+            $event->setClientContactId($customer->getId());
         }
         if (!empty($product)) {
             $event->setRelatedId($product);
@@ -73,7 +73,7 @@ class IncomakerApi
         $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
 
         if (isset($customer)) {
-            $event->setContactId($customer);
+            $event->setClientContactId($customer);
         }
         $event->setCampaignId($this->getCampaignId());  //TODO remove passing campaignId this way
         $event->addCustomField("total", $total);
@@ -89,7 +89,9 @@ class IncomakerApi
     public function addContact(\Magento\Customer\Model\Data\Customer $customer)
     {
 
-        $this->contactController = $this->incomaker->createContactController();
+        if (!isset($this->contactController)) {
+            $this->contactController = $this->incomaker->createContactController();
+        }
 
         $contact = new \Incomaker\Api\Data\Contact($customer->getId());
         $contact->setPermId($this->getPermId());

@@ -28,6 +28,7 @@ class OrderAdd implements \Magento\Framework\Event\ObserverInterface
         $this->cart->getQuote()->collectTotals();
 
         $this->incomakerApi->postOrderEvent('order_add', $order->getCustomerId(), $this->cart->getQuote()->getGrandTotal(), $this->cart->getQuote()->getId());
+        //TODO Fix wrong posting of Total instead of orderId
 
         $this->session->start();
         $this->session->unsVariable();
