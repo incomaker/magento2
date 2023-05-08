@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "incomaker/api": "^2.4"
+    "incomaker/api": "^2.4.1"
   },
   "license": [
     "proprietary"
