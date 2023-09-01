@@ -113,7 +113,7 @@ class ProductExport extends XmlExport
         foreach ($product->getCategoryIds() as $categoryId) {
             $prod["categories"][$i++] = $categoryId;
         }
-
+round(null);
         $prod["currency"] = $this->baseCurrencyCode;
         $prod["price"] = NumberHelper::round($product->getPrice(), \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
         $prod["priceAfterDiscount"] = NumberHelper::round($product->getSpecialPrice(), \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
