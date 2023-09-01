@@ -2,6 +2,8 @@
 
 namespace Incomaker\Magento2\Helper;
 
+use Incomaker\Api\Helper\NumberHelper;
+
 class ProductExport extends XmlExport
 {
 
@@ -113,12 +115,9 @@ class ProductExport extends XmlExport
         }
 
         $prod["currency"] = $this->baseCurrencyCode;
-        $prod["price"] = round($product->getPrice(),
-            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-        $prod["priceAfterDiscount"] = round($product->getSpecialPrice(),
-            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
-        $prod["purchase"] = round($product->getCost(),
-            $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["price"] = NumberHelper::round($product->getPrice(), \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["priceAfterDiscount"] = NumberHelper::round($product->getSpecialPrice(), \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
+        $prod["purchase"] = NumberHelper::round($product->getCost(), \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION);
         $prod["stock"] = $this->stockRegistry->getStockItem($product->getId())->getQty();
         $prod["active"] = ($product->isSalable() == true ? 1 : 0);
         $prod["updated"] = $product->getCreatedAt();

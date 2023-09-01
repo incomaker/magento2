@@ -7,7 +7,7 @@ abstract class XmlExport {
     const MAX_LIMIT = 1000;
     const API_VERSION = "2.9.3";
 
-    const MAX_PRODUCT_ID_LENGTH = 45;
+    const MAX_PRODUCT_ID_LENGTH = 100;
 
     public static $name;
 
