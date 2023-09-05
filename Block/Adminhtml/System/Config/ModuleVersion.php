@@ -2,6 +2,7 @@
 
 namespace Incomaker\Magento2\Block\Adminhtml\System\Config;
 
+use Incomaker\Api\Helper\JsonHelper;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -9,33 +10,33 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class ModuleVersion extends Field
 {
 
-    protected $_template = 'Incomaker_Magento2::system/config/module_version.phtml';
+	protected $_template = 'Incomaker_Magento2::system/config/module_version.phtml';
 
-    /**
-     * Remove scope label
-     *
-     * @param AbstractElement $element
-     * @return string
-     */
-    public function render(AbstractElement $element)
-    {
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
-        return parent::render($element);
-    }
+	/**
+	 * Remove scope label
+	 *
+	 * @param AbstractElement $element
+	 * @return string
+	 */
+	public function render(AbstractElement $element)
+	{
+		$element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+		return parent::render($element);
+	}
 
-    /**
-     * Return element html
-     *
-     * @param AbstractElement $element
-     * @return string
-     */
-    protected function _getElementHtml(AbstractElement $element)
-    {
-        return $this->_toHtml();
-    }
+	/**
+	 * Return element html
+	 *
+	 * @param AbstractElement $element
+	 * @return string
+	 */
+	protected function _getElementHtml(AbstractElement $element)
+	{
+		return $this->_toHtml();
+	}
 
-    public function getModuleVersion()
-    {
-        return "1.1.0";
-    }
+	public function getModuleVersion()
+	{
+		return JsonHelper::getValue(__DIR__ . '../../../composer.json', 'version');
+	}
 }

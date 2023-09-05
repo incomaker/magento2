@@ -2,6 +2,7 @@
   "name": "incomaker/magento2",
   "description": "Marketing automation with artificial intelligence",
   "type": "magento2-module",
+  "version": "1.2.0",
   "authors": [
     {
       "name": "Incomaker",
@@ -9,10 +10,10 @@
     }
   ],
   "require": {
-    "incomaker/api": "^3.1.1"
+    "incomaker/api": "^3.1.2"
   },
   "license": [
-    "proprietary"
+    "bsd-2"
   ],
   "autoload": {
     "files": [

@@ -1,0 +1,1 @@
+zip -FSr incomaker-magento2-module-1.1.1.zip . -x "log/*" "vendor/*" ".git/*" ".idea/*" .gitignore .env .env-example docker-compose.yml
