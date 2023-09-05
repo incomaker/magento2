@@ -1,10 +1,28 @@
-# Incomaker plugin for Magento
+# Incomaker Plugin for Magento
 
-Integrates XML feeds and tracking API into Magento2.
-
-# Plugin development in Docker
+Integrates **Incomaker** XML feeds and tracking API into Magento2.
 
 ## Installation
+
+Go to the directory where your **Magento** is installed and run following:
+
+```
+composer require incomaker/magento2
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:flush
+```
+
+Now open web browser, go to **Stores / Configuration**, change scope to **Main Website** 
+and finish plugin settings under section **Incomaker**. 
+
+Read more about plugin installation in the [Installation Instructions](https://support.incomaker.com/en/hc/2628921009/5/magento?category_id=4)
+
+## Plugin Development in Docker
+
+Information below is intended for plugin developers.
+
+### Installation
 
 Create configuration:
 
@@ -21,13 +39,13 @@ Now you can visit:
 Username and password are those you specified in `.env` file.
 Not secure! For development only!
 
-### More about Magento in Docker
+#### Read More about Magento in Docker...
 
 https://hub.docker.com/r/bitnami/magento/
 
-## Plugin Development
+### Plugin Development
 
-### Install and update using scripts
+#### Install and Update Using Scripts
 
 Install the plugin (needed only once):
 
@@ -40,7 +58,7 @@ Update the plugin (needed after plugin installation and after each code change):
 
     ./plugin-update
 
-### Install plugin manually
+#### Install Plugin Manually
 
 Log into the container:
 
@@ -64,7 +82,3 @@ bin/magento cache:flush
 ```
 
 You might need to restart Docker container after this.
-
-### More about Incomaker plugin for Magento2
-
-https://support.incomaker.com/cs/hc/2628921009/5/magento?category_id=4
