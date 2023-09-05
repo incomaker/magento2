@@ -2,7 +2,7 @@
   "name": "incomaker/magento2",
   "description": "Marketing automation with artificial intelligence",
   "type": "magento2-module",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "authors": [
     {
       "name": "Incomaker",

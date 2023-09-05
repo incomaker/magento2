@@ -37,6 +37,6 @@ class ModuleVersion extends Field
 
 	public function getModuleVersion()
 	{
-		return JsonHelper::getValue(__DIR__ . '../../../composer.json', 'version');
+		return JsonHelper::getValue(__DIR__ . '/../../../composer.json', 'version');
 	}
 }
