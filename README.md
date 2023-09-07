@@ -46,6 +46,9 @@ https://hub.docker.com/r/bitnami/magento/
 
 ### Plugin Development
 
+- https://developer.adobe.com/commerce/php/development/build/development-environment/
+
+
 #### Install and Update Using Scripts
 
 Install the plugin (needed only once):
