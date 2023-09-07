@@ -1,25 +1,37 @@
 {
-  "name": "incomaker/magento2",
-  "description": "Marketing automation with artificial intelligence",
-  "type": "magento2-module",
-  "version": "1.2.8",
-  "authors": [
-    {
-      "name": "Incomaker",
-      "email": "support@incomaker.com"
-    }
-  ],
-  "require": {
-    "incomaker/api": "^3.1.3"
-  },
-  "license": "GPL-2.0-or-later",
-  "autoload": {
-    "files": [
-      "registration.php"
-    ],
-    "psr-4": {
-      "Incomaker\\Magento2\\": "",
-      "Incomaker\\Api\\": ""
-    }
-  }
+	"name": "incomaker/magento2",
+	"description": "Marketing automation with artificial intelligence",
+	"type": "magento2-module",
+	"version": "1.2.9",
+	"authors": [
+		{
+			"name": "Incomaker",
+			"email": "support@incomaker.com"
+		}
+	],
+	"require": {
+		"magento/framework": "*",
+		"magento/module-eav": "*",
+		"incomaker/api": "^3.1.3"
+	},
+	"license": "GPL-2.0-or-later",
+	"autoload": {
+		"files": [
+			"registration.php"
+		],
+		"psr-4": {
+			"Incomaker\\Magento2\\": ""
+		}
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://repo.magento.com/"
+		}
+	],
+	"config": {
+		"allow-plugins": {
+			"magento/composer-dependency-version-audit-plugin": true
+		}
+	}
 }

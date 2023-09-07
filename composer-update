@@ -1,1 +1,1 @@
-sudo docker run --rm --interactive --tty --volume $PWD:/app composer composer update
+sudo docker run --rm --interactive --tty --volume $PWD:/app composer composer update --ignore-platform-req=*

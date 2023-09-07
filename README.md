@@ -48,6 +48,10 @@ https://hub.docker.com/r/bitnami/magento/
 
 - https://developer.adobe.com/commerce/php/development/build/development-environment/
 - https://www.mageplaza.com/devdocs/magento-2-module-development/
+- https://meetanshi.com/blog/magento-2-module-development/
+- https://www.mgt-commerce.com/magento-2-local-development-environment
+
+todo: async operations - https://developer.adobe.com/commerce/php/development/components/async-operations/
 
 #### Install and Update Using Scripts
 

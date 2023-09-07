@@ -2,31 +2,30 @@
 
 namespace Incomaker\Magento2\Helper;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Model\ScopeInterface;
 
-class Configuration extends \Magento\Framework\App\Helper\AbstractHelper {
+class Configuration extends AbstractHelper {
 
-	private $scopeConfig;
+	private WriterInterface $configWriter;
 
-	private $configWriter;
-
-	const CONFIG_SCOPE = \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE;
+	const CONFIG_SCOPE = ScopeInterface::SCOPE_WEBSITE;
 
 	public function __construct(
-		ScopeConfigInterface $scopeConfig,
+		Context $context,
 		WriterInterface $configWriter
 	) {
-		$this->scopeConfig = $scopeConfig;
+		parent::__construct($context);
 		$this->configWriter = $configWriter;
 	}
 
-	public function getConfig($config_path, $default = NULL) {
-		$val = $this->scopeConfig->getValue($config_path, self::CONFIG_SCOPE);
-		return $val ?? $default;
+	public function getConfig($config_path, $default = NULL): mixed	{
+		return $this->scopeConfig->getValue($config_path, self::CONFIG_SCOPE) ?? $default;
 	}
 
-	public function setConfig($config_path, $value) {
+	public function setConfig($config_path, $value): void {
 		$this->configWriter->save($config_path, $value, $scope = self::CONFIG_SCOPE);
 	}
 }
