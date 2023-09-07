@@ -2,8 +2,10 @@
 
 namespace Incomaker\Magento2\Helper;
 
-class Configuration
-{
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
+
+class Configuration {
 
 	private $scopeConfig;
 
@@ -12,22 +14,19 @@ class Configuration
 	const CONFIG_SCOPE = \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE;
 
 	public function __construct(
-		\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-		\Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-	)
-	{
-		$this->configWriter = $configWriter;
+		ScopeConfigInterface $scopeConfig,
+		WriterInterface $configWriter
+	) {
 		$this->scopeConfig = $scopeConfig;
+		$this->configWriter = $configWriter;
 	}
 
-	public function getConfig($config_path, $default = NULL)
-	{
+	public function getConfig($config_path, $default = NULL) {
 		$val = $this->scopeConfig->getValue($config_path, self::CONFIG_SCOPE);
 		return $val ?? $default;
 	}
 
-	public function setConfig($config_path, $value)
-	{
+	public function setConfig($config_path, $value) {
 		$this->configWriter->save($config_path, $value, $scope = self::CONFIG_SCOPE);
 	}
 }
