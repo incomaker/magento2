@@ -5,7 +5,7 @@ namespace Incomaker\Magento2\Helper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 
-class Configuration {
+class Configuration extends \Magento\Framework\App\Helper\AbstractHelper {
 
 	private $scopeConfig;
 

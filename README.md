@@ -47,7 +47,7 @@ https://hub.docker.com/r/bitnami/magento/
 ### Plugin Development
 
 - https://developer.adobe.com/commerce/php/development/build/development-environment/
-
+- https://www.mageplaza.com/devdocs/magento-2-module-development/
 
 #### Install and Update Using Scripts
 
