@@ -36,6 +36,7 @@ Now you can visit:
 
     http://localhost/admin
 
+
 Username and password are those you specified in `.env` file.
 Not secure! For development only!
 
