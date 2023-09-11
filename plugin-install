@@ -1,8 +1,10 @@
 docker exec -ti magento-docker-magento2 /bin/bash -c \
 	"cd /bitnami/magento && \
 	composer require incomaker/magento2 && \
-	chown daemon:root vendor -R && \
+	chown daemon:root . -R && \
 	bin/magento setup:upgrade && \
+	chown daemon:root . -R && \
 	bin/magento setup:di:compile && \
+	chown daemon:root . -R && \
 	bin/magento cache:flush && \
 	chown daemon:root . -R"

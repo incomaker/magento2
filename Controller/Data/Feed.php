@@ -2,6 +2,7 @@
 
 namespace Incomaker\Magento2\Controller\Data;
 
+use Exception;
 use Incomaker\Magento2\Controller\Data\Export\XmlExport;
 use Incomaker\Magento2\Controller\Data\Export\ContactExport;
 use Magento\Framework\UrlFactory;
@@ -36,7 +37,7 @@ class Feed extends \Magento\Framework\App\Action\Action
 
 		try {
 			$xmlExport = $this->manager->getExport($params["type"]);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST);
 			$result->setContents("400-1 Invalid command");
 			return $result;

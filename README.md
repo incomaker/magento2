@@ -1,5 +1,7 @@
 # Incomaker Plugin for Magento
 
+Sample: https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/next-steps/sample-data/composer-packages.html
+
 Integrates **Incomaker** XML feeds and tracking API into Magento2.
 
 ## Installation
@@ -44,12 +46,19 @@ Not secure! For development only!
 
 https://hub.docker.com/r/bitnami/magento/
 
-### Plugin Development
+### Module Development
+
+Online sources about Magento module development:
 
 - https://developer.adobe.com/commerce/php/development/build/development-environment/
 - https://www.mageplaza.com/devdocs/magento-2-module-development/
 - https://meetanshi.com/blog/magento-2-module-development/
-- https://www.mgt-commerce.com/magento-2-local-development-environment
+
+#### MGT - Dev Env
+
+https://www.mgt-commerce.com/magento-2-local-development-environment
+
+
 
 todo: async operations - https://developer.adobe.com/commerce/php/development/components/async-operations/
 
