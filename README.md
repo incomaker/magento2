@@ -58,9 +58,11 @@ Online sources about Magento module development:
 
 https://www.mgt-commerce.com/magento-2-local-development-environment
 
+Run:
 
+    ./mgt-dev
 
-todo: async operations - https://developer.adobe.com/commerce/php/development/components/async-operations/
+now go to `https://localhost:8443/`.
 
 #### Install and Update Using Scripts
 

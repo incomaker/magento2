@@ -1,28 +1,23 @@
 <?php
 
-namespace Incomaker\Magento2\Observer;
+	namespace Incomaker\Magento2\Observer;
 
-use Magento\Framework\Async\CallbackDeferred;
+	use Incomaker\Magento2\Helper\IncomakerApi;
+	use Magento\Framework\Event\Observer;
+	use Magento\Framework\Event\ObserverInterface;
 
-class ContactLogin implements \Magento\Framework\Event\ObserverInterface
-{
+	class ContactLogin implements ObserverInterface {
 
-    private $incomakerApi;
-    private $proxyDeferredFactory;
+		private $incomakerApi;
 
-    public function __construct(
-        \Incomaker\Magento2\Helper\IncomakerApi $incomakerApi,
-        ContactLogin\ProxyDeferredFactory $callResultFactory
-    )
-    {
-        $this->incomakerApi = $incomakerApi;
-        $this->proxyDeferredFactory = $callResultFactory;
-    }
+		public function __construct(
+			IncomakerApi $incomakerApi,
+		) {
+			$this->incomakerApi = $incomakerApi;
+		}
 
-    public function execute(\Magento\Framework\Event\Observer $observer)
-    {
-
-        $customer = $observer->getData('customer');
-        $this->incomakerApi->postEvent("login", $customer);
-    }
-}
+		public function execute(Observer $observer) {
+			$customer = $observer->getData('customer');
+			$this->incomakerApi->postEvent("login", $customer);
+		}
+	}

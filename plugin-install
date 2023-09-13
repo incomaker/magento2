@@ -6,5 +6,6 @@ docker exec -ti magento-docker-magento2 /bin/bash -c \
 	chown daemon:root . -R && \
 	bin/magento setup:di:compile && \
 	chown daemon:root . -R && \
+	bin/magento cache:clean && \
 	bin/magento cache:flush && \
 	chown daemon:root . -R"

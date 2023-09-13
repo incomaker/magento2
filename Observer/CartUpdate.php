@@ -3,42 +3,44 @@
 namespace Incomaker\Magento2\Observer;
 
 use Incomaker\Magento2\Helper\IncomakerApi;
-use Magento\Checkout\Model\Cart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
 use Psr\Log\LoggerInterface;
 
-class CartUpdate implements ObserverInterface
-{
+class CartUpdate implements ObserverInterface {
+
 	private $incomakerApi;
-	private $customerSession;
-	private $cart;
+
+	private $session;
+
+	private $quote;
 
 	private LoggerInterface $logger;
 
 	public function __construct(
 		IncomakerApi $incomakerApi,
-		Session $customerSession,
-		Cart $cart,
+		Session $session,
+		Quote $quote,
 		LoggerInterface $logger
 	) {
 		$this->incomakerApi = $incomakerApi;
-		$this->customerSession = $customerSession;
-		$this->cart = $cart;
+		$this->session = $session;
+		$this->quote = $quote;
 		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer)	{
-		$this->customerSession->start();
-		$customer = $this->customerSession->getCustomer();
+		$this->session->start();
+		$customer = $this->session->getCustomer();
 
 		$new = array();
-		foreach ($this->cart->getQuote()->getAllVisibleItems() as $item) {
+		foreach ($this->quote->getAllVisibleItems() as $item) {
 			$new[] = $item->getSku();
 		}
 
-		$variable = $this->customerSession->getLastCartState();
+		$variable = $this->session->getLastCartState();
 		$this->logger->debug("Hello - " . $variable);
 		$old = empty($variable) ? null : unserialize($variable);
 
@@ -46,13 +48,13 @@ class CartUpdate implements ObserverInterface
 		$diff = array_diff($new, $old);
 
 		if (!empty($diff)) {
-			$this->incomakerApi->postProductEvent('cart_add', $customer, current($diff), $this->cart->getQuote()->getId());
+			$this->incomakerApi->postProductEvent('cart_add', $customer, current($diff), $this->quote->getId());
 		} else {
 			$diff = array_diff($old, $new);
 			if (!empty($diff)) {
-				$this->incomakerApi->postProductEvent('cart_remove', $customer, current($diff), $this->cart->getQuote()->getId());
+				$this->incomakerApi->postProductEvent('cart_remove', $customer, current($diff), $this->quote->getId());
 			}
 		}
-		$this->customerSession->setLastCartState(serialize($new));
+		$this->session->setLastCartState(serialize($new));
 	}
 }

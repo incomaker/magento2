@@ -1,36 +1,39 @@
 <?php
-namespace Incomaker\Magento2\Observer;
 
-use Magento\Framework\Async\CallbackDeferred;
+	namespace Incomaker\Magento2\Observer;
 
-class OrderAdd implements \Magento\Framework\Event\ObserverInterface
-{
-    private $incomakerApi;
-    private $session;
-    private $cart;
-    private $proxyDeferredFactory;
+	use Incomaker\Magento2\Helper\IncomakerApi;
+	use Magento\Framework\Event\Observer;
+	use Magento\Framework\Event\ObserverInterface;
+	use Magento\Customer\Model\Session;
+	use Magento\Quote\Model\Quote;
 
-    public function __construct(
-        \Incomaker\Magento2\Helper\IncomakerApi $incomakerApi,
-        \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Checkout\Model\Cart $cart,
-        ContactRegistration\ProxyDeferredFactory $callResultFactory
-    ) {
-        $this->incomakerApi = $incomakerApi;
-        $this->session = $session;
-        $this->cart = $cart;
-        $this->proxyDeferredFactory = $callResultFactory;
-    }
+	class OrderAdd implements ObserverInterface {
 
-    public function execute(\Magento\Framework\Event\Observer $observer) {
+		private $incomakerApi;
 
-        $order = $observer->getOrder();
-        $this->cart->getQuote()->collectTotals();
+		private $session;
 
-        $this->incomakerApi->postOrderEvent('order_add', $order->getCustomerId(), $this->cart->getQuote()->getGrandTotal(), $this->cart->getQuote()->getId());
-        //TODO Fix wrong posting of Total instead of orderId
+		private $quote;
 
-        $this->session->start();
-        $this->session->unsVariable();
-    }
-}
+		public function __construct(
+			IncomakerApi $incomakerApi,
+			Session $session,
+			Quote $quote
+		) {
+			$this->incomakerApi = $incomakerApi;
+			$this->session = $session;
+			$this->quote = $quote;
+		}
+
+		public function execute(Observer $observer) {
+			$order = $observer->getOrder();
+			$this->quote->collectTotals();
+
+			$this->incomakerApi->postOrderEvent('order_add', $order->getCustomerId(), $this->quote->getGrandTotal(), $this->quote->getId());
+			//TODO Fix wrong posting of Total instead of orderId
+
+			$this->session->start();
+			$this->session->unsLastCartState();
+		}
+	}
