@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1968c55c98b8a70700eccc3fcd71f24f",
+    "content-hash": "c131df6b187d84c0a3ea16f742dfc014",
     "packages": [
         {
             "name": "brick/math",
@@ -1170,19 +1170,20 @@
         },
         {
             "name": "incomaker/api",
-            "version": "3.1.3",
+            "version": "3.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/incomaker/api.git",
-                "reference": "9fa0ddd5edf548b766ce8bbd41c058a5b2fc1cf3"
+                "reference": "8b1f2a7117f3267083f3f178da66481dc6625f6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/incomaker/api/zipball/9fa0ddd5edf548b766ce8bbd41c058a5b2fc1cf3",
-                "reference": "9fa0ddd5edf548b766ce8bbd41c058a5b2fc1cf3",
+                "url": "https://api.github.com/repos/incomaker/api/zipball/8b1f2a7117f3267083f3f178da66481dc6625f6a",
+                "reference": "8b1f2a7117f3267083f3f178da66481dc6625f6a",
                 "shasum": ""
             },
             "require": {
+                "ext-curl": "*",
                 "ext-json": "*"
             },
             "type": "library",
@@ -1204,9 +1205,9 @@
             "description": "Incomaker API library",
             "support": {
                 "issues": "https://github.com/incomaker/api/issues",
-                "source": "https://github.com/incomaker/api/tree/3.1.3"
+                "source": "https://github.com/incomaker/api/tree/3.1.5"
             },
-            "time": "2023-09-07T11:28:43+00:00"
+            "time": "2023-09-13T13:55:07+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -7980,7 +7981,11 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "^7.4|^8.2",
+        "ext-simplexml": "*",
+        "ext-json": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

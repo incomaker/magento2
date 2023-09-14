@@ -2,122 +2,139 @@
 
 namespace Incomaker\Magento2\Helper;
 
-class IncomakerApi
-{
-    private $cookieManager;
-    private $eventController;
-    private $addressRepository;
-    private $incomaker;
-    private $logger;
+use Incomaker\Api\Connector;
+use Incomaker\Api\Data\Event;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use Psr\Log\LoggerInterface;
 
-    public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Incomaker\Api\Connector $api,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Psr\Log\LoggerInterface $logger
-    )
-    {
-        $this->cookieManager = $cookieManager;
-        $this->incomaker = $api;
-        $this->addressRepository = $addressRepository;
-        $this->logger = $logger;
-    }
+class IncomakerApi {
 
-    public function getPermId()
-    {
+	private CookieManagerInterface $cookieManager;
+	private AddressRepositoryInterface $addressRepository;
+	private Connector $incomaker;
+	private LoggerInterface $logger;
+	private $eventController;
+	private $contactController;
 
-        if ($this->cookieManager->getCookie("incomaker_p") != null) {
-            return $this->cookieManager->getCookie("incomaker_p");
-        }
-        return $this->cookieManager->getCookie("permId");
-    }
+	public function __construct(
+		CookieManagerInterface $cookieManager,
+		Connector $api,
+		AddressRepositoryInterface $addressRepository,
+		LoggerInterface $logger
+	) {
+		$this->cookieManager = $cookieManager;
+		$this->incomaker = $api;
+		$this->addressRepository = $addressRepository;
+		$this->logger = $logger;
+	}
 
-    public function getCampaignId() {
-        return $this->cookieManager->getCookie("incomaker_c");
-    }
+	public function getPermId() {
+		if ($this->cookieManager->getCookie("incomaker_p") != null) {
+			return $this->cookieManager->getCookie("incomaker_p");
+		}
+		return $this->cookieManager->getCookie("permId");
+	}
 
-    public function postEvent($event, $customer)
-    {
-        $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
+	/**
+	 * Checks whether plugin settings values are okay and logs a warning when not.
+	 * @return boolean True if plugin settings are set up
+	 */
+	public function checkSettings() {
+		if ($this->incomaker->isSettingsOk()) return true;
+		$this->logger->warning("Incomaker plugin is not properly configured! Make sure you set values of API key, Account ID and Plugin ID on plugin configuration page.");
+		return false;
+	}
 
-        if (isset($customer)) {
-            $event->setClientContactId($customer->getId());
-        }
-        if (!isset($this->eventController)) {
-            $this->eventController = $this->incomaker->createEventController();
-        }
-        $this->eventController->addEvent($event);
-    }
+	public function getCampaignId() {
+		return $this->cookieManager->getCookie("incomaker_c");
+	}
 
-    public function postProductEvent($event, $customer, $product, $session)
-    {
-        $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
+	public function postEvent($event, $customer) {
+		if (!$this->checkSettings()) return;
 
-        if (isset($customer)) {
-            $event->setClientContactId($customer->getId());
-        }
-        if (!empty($product)) {
-            $event->setRelatedId($product);
-        }
-        if (!empty($session)) {
-            $event->setSessionId($session);
-        }
-        if (!isset($this->eventController)) {
-            $this->eventController = $this->incomaker->createEventController();
-        }
-        $this->eventController->addEvent($event);
-    }
+		$event = new Event($event, $this->getPermId());
 
-    public function postOrderEvent($event, $customer, $total, $session)
-    {
-        $event = new \Incomaker\Api\Data\Event($event, $this->getPermId());
+		if (isset($customer)) {
+			$event->setClientContactId($customer->getId());
+		}
+		if (!isset($this->eventController)) {
+			$this->eventController = $this->incomaker->createEventController();
+		}
+		$this->eventController->addEvent($event);
+	}
 
-        if (isset($customer)) {
-            $event->setClientContactId($customer);
-        }
-        $event->setCampaignId($this->getCampaignId());  //TODO remove passing campaignId this way
-        $event->addCustomField("total", $total);
-        if (!empty($session)) {
-            $event->setSessionId($session);
-        }
-        if (!isset($this->eventController)) {
-            $this->eventController = $this->incomaker->createEventController();
-        }
-        $this->eventController->addEvent($event);
-    }
+	public function postProductEvent($event, $customer, $product, $session) {
+		if (!$this->checkSettings()) return;
 
-    public function addContact(\Magento\Customer\Model\Data\Customer $customer)
-    {
+		$event = new Event($event, $this->getPermId());
 
-        if (!isset($this->contactController)) {
-            $this->contactController = $this->incomaker->createContactController();
-        }
+		if (isset($customer)) {
+			$event->setClientContactId($customer->getId());
+		}
+		if (!empty($product)) {
+			$event->setRelatedId($product);
+		}
+		if (!empty($session)) {
+			$event->setSessionId($session);
+		}
+		if (!isset($this->eventController)) {
+			$this->eventController = $this->incomaker->createEventController();
+		}
+		$this->eventController->addEvent($event);
+	}
 
-        $contact = new \Incomaker\Api\Data\Contact($customer->getId());
-        $contact->setPermId($this->getPermId());
-        $contact->setFirstName(htmlspecialchars($customer->getFirstname()));
-        $contact->setLastName(htmlspecialchars($customer->getLastname()));
-        $contact->setEmail($customer->getEmail());
-        $contact->setBirthday($customer->getDob());
+	public function postOrderEvent($event, $customer, $total, $session) {
+		if (!$this->checkSettings()) return;
 
-        $customerId = $customer->getDefaultBilling();
-        if (isset($customerId)) {
-            $billingAddress = $this->addressRepository->getById($customerId);
-            if ($billingAddress != false) {
-                $contact->setCompanyName(htmlspecialchars($billingAddress->getCompany()));
-                if (isset($billingAddress->getStreet()[0])) {
-                    $contact->setStreet(htmlspecialchars($billingAddress->getStreet()[0]));
-                }
+		$event = new Event($event, $this->getPermId());
 
-                $contact->setZipCode(htmlspecialchars($billingAddress->getPostcode()));
-                $contact->setCity(htmlspecialchars($billingAddress->getCity()));
-                $contact->setPhoneNumber1($billingAddress->getTelephone());
-                $contact->setPhoneNumber2($billingAddress->getFax());
-                $contact->setCountry(strtolower($billingAddress->getCountryId()));
-            }
-        }
+		if (isset($customer)) {
+			$event->setClientContactId($customer);
+		}
+		$event->setCampaignId($this->getCampaignId());  //TODO remove passing campaignId this way
+		$event->addCustomField("total", $total);
+		if (!empty($session)) {
+			$event->setSessionId($session);
+		}
+		if (!isset($this->eventController)) {
+			$this->eventController = $this->incomaker->createEventController();
+		}
+		$this->eventController->addEvent($event);
+	}
 
-        $this->contactController->addContact($contact);
+	public function addContact(\Magento\Customer\Model\Data\Customer $customer) {
+		if (!$this->checkSettings()) return;
 
-    }
+		if (!isset($this->contactController)) {
+			$this->contactController = $this->incomaker->createContactController();
+		}
+
+		$contact = new \Incomaker\Api\Data\Contact($customer->getId());
+		$contact->setPermId($this->getPermId());
+		$contact->setFirstName(htmlspecialchars($customer->getFirstname()));
+		$contact->setLastName(htmlspecialchars($customer->getLastname()));
+		$contact->setEmail($customer->getEmail());
+		$contact->setBirthday($customer->getDob());
+
+		$customerId = $customer->getDefaultBilling();
+		if (isset($customerId)) {
+			$billingAddress = $this->addressRepository->getById($customerId);
+			if ($billingAddress != false) {
+				$contact->setCompanyName(htmlspecialchars($billingAddress->getCompany()));
+				if (isset($billingAddress->getStreet()[0])) {
+					$contact->setStreet(htmlspecialchars($billingAddress->getStreet()[0]));
+				}
+
+				$contact->setZipCode(htmlspecialchars($billingAddress->getPostcode()));
+				$contact->setCity(htmlspecialchars($billingAddress->getCity()));
+				$contact->setPhoneNumber1($billingAddress->getTelephone());
+				$contact->setPhoneNumber2($billingAddress->getFax());
+				$contact->setCountry(strtolower($billingAddress->getCountryId()));
+			}
+		}
+
+		$this->contactController->addContact($contact);
+
+	}
 }

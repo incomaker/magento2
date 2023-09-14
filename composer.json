@@ -10,9 +10,13 @@
 		}
 	],
 	"require": {
+		"php": "^7.4|^8.2",
 		"ext-simplexml": "*",
+		"ext-json": "*",
 		"magento/framework": "*",
-		"incomaker/api": "^3.1.4"
+		"magento/module-quote": "*",
+		"magento/module-customer": "*",
+		"incomaker/api": "^3.1.5"
 	},
 	"license": "GPL-2.0-or-later",
 	"autoload": {

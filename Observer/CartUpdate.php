@@ -3,10 +3,9 @@
 namespace Incomaker\Magento2\Observer;
 
 use Incomaker\Magento2\Helper\IncomakerApi;
-use Magento\Customer\Model\Session;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Quote\Model\Quote;
 use Psr\Log\LoggerInterface;
 
 class CartUpdate implements ObserverInterface {
@@ -15,46 +14,46 @@ class CartUpdate implements ObserverInterface {
 
 	private $session;
 
-	private $quote;
-
 	private LoggerInterface $logger;
 
 	public function __construct(
 		IncomakerApi $incomakerApi,
 		Session $session,
-		Quote $quote,
 		LoggerInterface $logger
 	) {
 		$this->incomakerApi = $incomakerApi;
 		$this->session = $session;
-		$this->quote = $quote;
 		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer)	{
 		$this->session->start();
-		$customer = $this->session->getCustomer();
+		$quote = $this->session->getQuote();
+		$customer = $quote->getCustomer();
+		$this->logger->debug("Customer - " . json_encode($customer));
 
-		$new = array();
-		foreach ($this->quote->getAllVisibleItems() as $item) {
-			$new[] = $item->getSku();
+		$new_cart = [];
+		foreach ($quote->getAllVisibleItems() as $item) {
+			$new_cart[] = $item->getSku();
 		}
 
-		$variable = $this->session->getLastCartState();
-		$this->logger->debug("Hello - " . $variable);
-		$old = empty($variable) ? null : unserialize($variable);
+		$cart_serialized = $this->session->getLastCartState();
+		$old_cart = empty($cart_serialized) ? [] : unserialize($cart_serialized);
 
-		if (empty($old)) $old = array();
-		$diff = array_diff($new, $old);
+		$added = array_diff($new_cart, $old_cart);
+		$removed = array_diff($old_cart, $new_cart);
 
-		if (!empty($diff)) {
-			$this->incomakerApi->postProductEvent('cart_add', $customer, current($diff), $this->quote->getId());
-		} else {
-			$diff = array_diff($old, $new);
-			if (!empty($diff)) {
-				$this->incomakerApi->postProductEvent('cart_remove', $customer, current($diff), $this->quote->getId());
-			}
+		$this->logger->debug("Added - " . json_encode($added));
+		$this->logger->debug("Removed - " . json_encode($removed));
+
+		foreach ($added as $addedSku) {
+			$this->incomakerApi->postProductEvent('cart_add', $customer, $addedSku, $quote->getId());
 		}
-		$this->session->setLastCartState(serialize($new));
+
+		foreach ($removed as $removedSku) {
+			$this->incomakerApi->postProductEvent('cart_remove', $customer, $removedSku, $quote->getId());
+		}
+
+		$this->session->setLastCartState(serialize($new_cart));
 	}
 }

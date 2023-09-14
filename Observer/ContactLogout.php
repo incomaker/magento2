@@ -1,23 +1,23 @@
 <?php
 
-	namespace Incomaker\Magento2\Observer;
+namespace Incomaker\Magento2\Observer;
 
-	use Incomaker\Magento2\Helper\IncomakerApi;
-	use Magento\Framework\Event\Observer;
-	use Magento\Framework\Event\ObserverInterface;
+use Incomaker\Magento2\Helper\IncomakerApi;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
 
-	class ContactLogout implements ObserverInterface {
+class ContactLogout implements ObserverInterface {
 
-		private $incomakerApi;
+	private $incomakerApi;
 
-		public function __construct(
-			IncomakerApi $incomakerApi
-		) {
-			$this->incomakerApi = $incomakerApi;
-		}
-
-		public function execute(Observer $observer) {
-			$customer = $observer->getData('customer');
-			$this->incomakerApi->postEvent("logout", $customer);
-		}
+	public function __construct(
+		IncomakerApi $incomakerApi
+	) {
+		$this->incomakerApi = $incomakerApi;
 	}
+
+	public function execute(Observer $observer) {
+		$customer = $observer->getData('customer');
+		$this->incomakerApi->postEvent('logout', $customer);
+	}
+}

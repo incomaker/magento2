@@ -5,7 +5,7 @@
 	use Incomaker\Magento2\Helper\IncomakerApi;
 	use Magento\Framework\Event\Observer;
 	use Magento\Framework\Event\ObserverInterface;
-	use Magento\Customer\Model\Session;
+	use Magento\Checkout\Model\Session;
 	use Magento\Quote\Model\Quote;
 
 	class OrderAdd implements ObserverInterface {
