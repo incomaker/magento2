@@ -64,19 +64,23 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function postProductEvent($event, $customer, $product, $session) {
+	public function postProductEvent($event, $customerId, $productId, $sessionId) {
+
+		$this->logger->warning("Sleeping 5 secs");
+		sleep(5);
+
 		if (!$this->checkSettings()) return;
 
 		$event = new Event($event, $this->getPermId());
 
-		if (isset($customer)) {
-			$event->setClientContactId($customer->getId());
+		if (!empty($customerId)) {
+			$event->setClientContactId($customerId);
 		}
-		if (!empty($product)) {
-			$event->setRelatedId($product);
+		if (!empty($productId)) {
+			$event->setRelatedId($productId);
 		}
-		if (!empty($session)) {
-			$event->setSessionId($session);
+		if (!empty($sessionId)) {
+			$event->setSessionId($sessionId);
 		}
 		if (!isset($this->eventController)) {
 			$this->eventController = $this->incomaker->createEventController();

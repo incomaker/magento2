@@ -1,5 +1,5 @@
 vendor
 .idea
 .env
-log
 *.zip
+auth.json

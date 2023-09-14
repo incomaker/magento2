@@ -2,7 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Helper\IncomakerApi;
+use Incomaker\Magento2\Async\EventProduct\EventProductParam;
+use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -10,23 +11,23 @@ use Psr\Log\LoggerInterface;
 
 class CartUpdate implements ObserverInterface {
 
-	private $incomakerApi;
+	private $publisher;
 
 	private $session;
 
 	private LoggerInterface $logger;
 
 	public function __construct(
-		IncomakerApi $incomakerApi,
+		EventProductPublisher $publisher,
 		Session $session,
 		LoggerInterface $logger
 	) {
-		$this->incomakerApi = $incomakerApi;
+		$this->publisher = $publisher;
 		$this->session = $session;
 		$this->logger = $logger;
 	}
 
-	public function execute(Observer $observer)	{
+	public function execute(Observer $observer) {
 		$this->session->start();
 		$quote = $this->session->getQuote();
 		$customer = $quote->getCustomer();
@@ -46,12 +47,14 @@ class CartUpdate implements ObserverInterface {
 		$this->logger->debug("Added - " . json_encode($added));
 		$this->logger->debug("Removed - " . json_encode($removed));
 
+		$customerId = $customer ? $customer->getId() : null;
+
 		foreach ($added as $addedSku) {
-			$this->incomakerApi->postProductEvent('cart_add', $customer, $addedSku, $quote->getId());
+			$this->publisher->publish(new EventProductParam('cart_add', $customerId, $addedSku, $quote->getId()));
 		}
 
 		foreach ($removed as $removedSku) {
-			$this->incomakerApi->postProductEvent('cart_remove', $customer, $removedSku, $quote->getId());
+			$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
 		}
 
 		$this->session->setLastCartState(serialize($new_cart));
