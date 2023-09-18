@@ -23,9 +23,9 @@ abstract class PublisherBase extends AsyncBase {
 		$this->publisher = $publisher;
 	}
 
-	public function publish(object $param) {
+	public function publish($param) {
 		$message = $this->serialize($param);
-		$this->logger->debug("Publishing message to topic " . $this->topicName . ", message: " . $message);
+		$this->logger->debug("Publishing Message " . $message . " into topic " . $this->topicName);
 		$this->publisher->publish($this->topicName, $message);
 	}
 }

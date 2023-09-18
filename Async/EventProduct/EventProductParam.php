@@ -6,7 +6,7 @@ class EventProductParam {
 
 	public string $eventName;
 
-	public string $customerId;
+	public $customerId;
 
 	public string $productId;
 
@@ -14,7 +14,7 @@ class EventProductParam {
 
 	public function __construct(
 		string $eventName,
-		string $customerId,
+		$customerId,
 		string $productId,
 		string $sessionId
 	) {

@@ -1,5 +1,0 @@
-docker exec -ti magento-docker-magento2 /bin/bash -c \
-	"cd /bitnami/magento && \
-	bin/magento cache:clean && \
-	bin/magento cache:flush &&
-	chown daemon:root . -R"

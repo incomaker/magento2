@@ -20,9 +20,12 @@ abstract class ConsumerBase extends AsyncBase {
 	}
 
 	public function process(string $param) {
-		$this->logger->debug("Processing message: " . $param);
-		$this->consume($this->deserialize($param));
+		$this->logger->debug("ConsumerBase->process");
+		$this->logger->debug("Param - " . $param);
+		$paramDeser = $this->deserialize($param);
+		$this->logger->debug("Parameter - " . print_r($paramDeser, true));
+		$this->consume($paramDeser);
 	}
 
-	protected abstract function consume(object $param);
+	protected abstract function consume($param);
 }

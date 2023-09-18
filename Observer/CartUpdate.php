@@ -4,50 +4,49 @@ namespace Incomaker\Magento2\Observer;
 
 use Incomaker\Magento2\Async\EventProduct\EventProductParam;
 use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
-use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
 
 class CartUpdate implements ObserverInterface {
 
-	private $publisher;
+	private EventProductPublisher $publisher;
 
-	private $session;
+	private CheckoutSession $checkoutSession;
+
+	private CustomerSession $customerSession;
 
 	private LoggerInterface $logger;
 
 	public function __construct(
 		EventProductPublisher $publisher,
-		Session $session,
+		CheckoutSession $checkoutSession,
+		CustomerSession $customerSession,
 		LoggerInterface $logger
 	) {
 		$this->publisher = $publisher;
-		$this->session = $session;
+		$this->checkoutSession = $checkoutSession;
+		$this->customerSession = $customerSession;
 		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer) {
-		$this->session->start();
-		$quote = $this->session->getQuote();
+		$quote = $this->checkoutSession->getQuote();
 		$customer = $quote->getCustomer();
-		$this->logger->debug("Customer - " . json_encode($customer));
+		$customerId = $customer ? $customer->getId() : null;
 
 		$new_cart = [];
 		foreach ($quote->getAllVisibleItems() as $item) {
 			$new_cart[] = $item->getSku();
 		}
 
-		$cart_serialized = $this->session->getLastCartState();
+		$cart_serialized = $this->customerSession->getLastCartState();
 		$old_cart = empty($cart_serialized) ? [] : unserialize($cart_serialized);
 
 		$added = array_diff($new_cart, $old_cart);
 		$removed = array_diff($old_cart, $new_cart);
-
-		$this->logger->debug("Added - " . json_encode($added));
-		$this->logger->debug("Removed - " . json_encode($removed));
-
-		$customerId = $customer ? $customer->getId() : null;
 
 		foreach ($added as $addedSku) {
 			$this->publisher->publish(new EventProductParam('cart_add', $customerId, $addedSku, $quote->getId()));
@@ -57,6 +56,6 @@ class CartUpdate implements ObserverInterface {
 			$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
 		}
 
-		$this->session->setLastCartState(serialize($new_cart));
+		$this->customerSession->setLastCartState(serialize($new_cart));
 	}
 }

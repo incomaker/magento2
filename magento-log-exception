@@ -1,1 +1,0 @@
-docker exec -ti magento-docker-magento2 /bin/bash -c "cat /bitnami/magento/var/log/exception.log"
