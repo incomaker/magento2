@@ -1,5 +1,8 @@
+chmod -R 777 .
 bin/magento setup:upgrade
+chmod -R 777 .
 bin/magento setup:di:compile
+chmod -R 777 .
 bin/magento cache:clean
 bin/magento cache:flush
 chmod -R 777 .

@@ -9,12 +9,12 @@ bin/magento setup:install \
     --base-url='http://incomaker.mgt/' --base-url-secure='https://incomaker.mgt/' \
     --admin-user='admin' --admin-password='!admin123!' \
     --admin-email='john@doe.com' --admin-firstname='John' --admin-lastname='Doe'
-chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
+chmod -R 777 .
 bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
 composer require incomaker/magento2
 bin/magento setup:upgrade
 bin/magento setup:di:compile
 bin/magento cache:clean
 bin/magento cache:flush
-chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
+chmod -R 777 .
 bin/magento deploy:mode:set developer

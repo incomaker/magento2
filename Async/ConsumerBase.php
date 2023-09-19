@@ -3,7 +3,6 @@
 namespace Incomaker\Magento2\Async;
 
 use Incomaker\Magento2\Helper\IncomakerApi;
-use Magento\Framework\Serialize\Serializer\Json;
 use Psr\Log\LoggerInterface;
 
 abstract class ConsumerBase extends AsyncBase {
@@ -11,20 +10,20 @@ abstract class ConsumerBase extends AsyncBase {
 	protected IncomakerApi $incomakerApi;
 
 	public function __construct(
-		Json $json,
 		LoggerInterface $logger,
 		IncomakerApi $incomakerApi
 	) {
-		parent::__construct($json, $logger);
+		parent::__construct($logger);
 		$this->incomakerApi = $incomakerApi;
 	}
 
 	public function process(string $param) {
-		$this->logger->debug("ConsumerBase->process");
-		$this->logger->debug("Param - " . $param);
-		$paramDeser = $this->deserialize($param);
-		$this->logger->debug("Parameter - " . print_r($paramDeser, true));
-		$this->consume($paramDeser);
+		try {
+			$this->logger->debug("Processing message . " . $param);
+			$this->consume($this->deserialize($param));
+		} catch (\Exception $e) {
+			$this->logger->error("Exception when processing a message " . $param . ": " . $e->getMessage());
+		}
 	}
 
 	protected abstract function consume($param);

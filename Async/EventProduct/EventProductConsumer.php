@@ -6,13 +6,10 @@ use Incomaker\Magento2\Async\ConsumerBase;
 
 class EventProductConsumer extends ConsumerBase {
 
+	/**
+	 * @param EventProductParam $param
+	 */
 	protected function consume($param) {
-		$this->logger->debug("Consuming EventProduct message: " . $this->serialize($param));
-
-		/**
-		 * @type EventProductParam $productParam
-		 */
-		$productParam = $param;
-		$this->incomakerApi->postProductEvent($productParam->eventName, $productParam->customerId, $productParam->productId, $productParam->sessionId);
+		$this->incomakerApi->postProductEvent($param->eventName, $param->customerId, $param->productId, $param->sessionId);
 	}
 }
