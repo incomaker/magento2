@@ -4,6 +4,15 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd"
 >
 	<publisher topic="incomaker.event.product">
-		<connection name="db" exchange="magento-db" />
+		<connection name="db" exchange="magento-db"/>
+	</publisher>
+	<publisher topic="incomaker.event.order">
+		<connection name="db" exchange="magento-db"/>
+	</publisher>
+	<publisher topic="incomaker.event.user">
+		<connection name="db" exchange="magento-db"/>
+	</publisher>
+	<publisher topic="incomaker.event.add-contact">
+		<connection name="db" exchange="magento-db"/>
 	</publisher>
 </config>

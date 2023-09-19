@@ -10,6 +10,6 @@ class EventProductConsumer extends ConsumerBase {
 	 * @param EventProductParam $param
 	 */
 	protected function consume($param) {
-		$this->incomakerApi->postProductEvent($param->eventName, $param->customerId, $param->productId, $param->sessionId);
+		$this->incomakerApi->sendProductEvent($param->eventName, $param->customerId, $param->productId, $param->sessionId);
 	}
 }

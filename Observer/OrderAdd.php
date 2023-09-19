@@ -30,7 +30,7 @@ class OrderAdd implements ObserverInterface {
 		$order = $observer->getOrder();
 		$this->quote->collectTotals();
 
-		$this->incomakerApi->postOrderEvent('order_add', $order->getCustomerId(), $this->quote->getGrandTotal(), $this->quote->getId());
+		$this->incomakerApi->sendOrderEvent('order_add', $order->getCustomerId(), $this->quote->getGrandTotal(), $this->quote->getId());
 		//TODO Fix wrong posting of Total instead of orderId
 
 		//$this->customerSession->start();

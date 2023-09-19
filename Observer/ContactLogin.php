@@ -2,22 +2,23 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Helper\IncomakerApi;
+use Incomaker\Magento2\Async\EventUser\EventUserParam;
+use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class ContactLogin implements ObserverInterface {
 
-	private $incomakerApi;
+	private $publisher;
 
 	public function __construct(
-		IncomakerApi $incomakerApi,
+		EventUserPublisher $publisher
 	) {
-		$this->incomakerApi = $incomakerApi;
+		$this->publisher = $publisher;
 	}
 
 	public function execute(Observer $observer) {
 		$customer = $observer->getData('customer');
-		$this->incomakerApi->postEvent('login', $customer);
+		$this->publisher->publish(new EventUserParam('login', $customer->getId()));
 	}
 }

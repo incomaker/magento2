@@ -3,8 +3,10 @@
 namespace Incomaker\Magento2\Helper;
 
 use Incomaker\Api\Connector;
+use Incomaker\Api\Data\Contact;
 use Incomaker\Api\Data\Event;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -12,6 +14,7 @@ class IncomakerApi {
 
 	private CookieManagerInterface $cookieManager;
 	private AddressRepositoryInterface $addressRepository;
+	private CustomerRepositoryInterface $customerRepository;
 	private Connector $incomaker;
 	private LoggerInterface $logger;
 	private $eventController;
@@ -21,11 +24,13 @@ class IncomakerApi {
 		CookieManagerInterface $cookieManager,
 		Connector $api,
 		AddressRepositoryInterface $addressRepository,
+		CustomerRepositoryInterface $customerRepository,
 		LoggerInterface $logger
 	) {
 		$this->cookieManager = $cookieManager;
 		$this->incomaker = $api;
 		$this->addressRepository = $addressRepository;
+		$this->customerRepository = $customerRepository;
 		$this->logger = $logger;
 	}
 
@@ -50,13 +55,13 @@ class IncomakerApi {
 		return $this->cookieManager->getCookie("incomaker_c");
 	}
 
-	public function postEvent($event, $customer) {
+	public function sendUserEvent($event, $customerId) {
 		if (!$this->checkSettings()) return;
 
 		$event = new Event($event, $this->getPermId());
 
-		if (isset($customer)) {
-			$event->setClientContactId($customer->getId());
+		if (isset($customerId)) {
+			$event->setClientContactId($customerId);
 		}
 		if (!isset($this->eventController)) {
 			$this->eventController = $this->incomaker->createEventController();
@@ -64,11 +69,7 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function postProductEvent($event, $customerId, $productId, $sessionId) {
-
-		$this->logger->warning("Sleeping 5 secs");
-		sleep(5);
-
+	public function sendProductEvent($event, $customerId, $productId, $sessionId) {
 		if (!$this->checkSettings()) return;
 
 		$event = new Event($event, $this->getPermId());
@@ -88,13 +89,13 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function postOrderEvent($event, $customer, $total, $session) {
+	public function sendOrderEvent($event, $customerId, $total, $session) {
 		if (!$this->checkSettings()) return;
 
 		$event = new Event($event, $this->getPermId());
 
-		if (isset($customer)) {
-			$event->setClientContactId($customer);
+		if (isset($customerId)) {
+			$event->setClientContactId($customerId);
 		}
 		$event->setCampaignId($this->getCampaignId());  //TODO remove passing campaignId this way
 		$event->addCustomField("total", $total);
@@ -107,14 +108,15 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function addContact(\Magento\Customer\Model\Data\Customer $customer) {
+	public function sendAddContactEvent($customerId) {
 		if (!$this->checkSettings()) return;
 
 		if (!isset($this->contactController)) {
 			$this->contactController = $this->incomaker->createContactController();
 		}
 
-		$contact = new \Incomaker\Api\Data\Contact($customer->getId());
+		$customer = $this->customerRepository->getById($customerId);
+		$contact = new Contact($customer->getId());
 		$contact->setPermId($this->getPermId());
 		$contact->setFirstName(htmlspecialchars($customer->getFirstname()));
 		$contact->setLastName(htmlspecialchars($customer->getLastname()));
@@ -139,6 +141,5 @@ class IncomakerApi {
 		}
 
 		$this->contactController->addContact($contact);
-
 	}
 }

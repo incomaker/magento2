@@ -10,5 +10,23 @@
 			destinationType="queue"
 			destination="incomaker.event.product"
 		/>
+		<binding
+			id="incomakerEventOrderQueueBinding"
+			topic="incomaker.event.order"
+			destinationType="queue"
+			destination="incomaker.event.order"
+		/>
+		<binding
+			id="incomakerEventUserQueueBinding"
+			topic="incomaker.event.user"
+			destinationType="queue"
+			destination="incomaker.event.user"
+		/>
+		<binding
+			id="incomakerEventAddContactQueueBinding"
+			topic="incomaker.event.add-contact"
+			destinationType="queue"
+			destination="incomaker.event.add-contact"
+		/>
 	</exchange>
 </config>

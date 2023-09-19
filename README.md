@@ -89,10 +89,6 @@ Disable Two-Factor:
 
     bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
 
-Install Developer Toolbar:
-
-    composer require --dev mgtcommerce/module-mgtdevelopertoolbar
-
 Install Incomaker Module:
 
     composer require incomaker/magento2
@@ -105,10 +101,6 @@ Install Incomaker Module:
 Activate Developer Mode:
 
     bin/magento deploy:mode:set developer
-
-Install Sample Data Module:
-
-    https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/next-steps/sample-data/composer-packages.html
 
 Convenience script (does all of the above):
 
