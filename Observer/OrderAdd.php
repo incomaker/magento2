@@ -2,38 +2,45 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Helper\IncomakerApi;
+use Incomaker\Magento2\Async\EventOrder\EventOrderParam;
+use Incomaker\Magento2\Async\EventOrder\EventOrderPublisher;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
+use Psr\Log\LoggerInterface;
 
 class OrderAdd implements ObserverInterface {
 
-	private $incomakerApi;
+	private EventOrderPublisher $publisher;
 
 	private CustomerSession $customerSession;
 
-	private $quote;
+	private Quote $quote;
+
+	private LoggerInterface $logger;
 
 	public function __construct(
-		IncomakerApi $incomakerApi,
+		EventOrderPublisher $publisher,
 		CustomerSession $customerSession,
-		Quote $quote
+		Quote $quote,
+		LoggerInterface $logger
 	) {
-		$this->incomakerApi = $incomakerApi;
+		$this->publisher = $publisher;
 		$this->customerSession = $customerSession;
 		$this->quote = $quote;
+		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer) {
-		$order = $observer->getOrder();
-		$this->quote->collectTotals();
-
-		$this->incomakerApi->sendOrderEvent('order_add', $order->getCustomerId(), $this->quote->getGrandTotal(), $this->quote->getId());
-		//TODO Fix wrong posting of Total instead of orderId
-
-		//$this->customerSession->start();
-		$this->customerSession->unsLastCartState();
+		try {
+			$this->customerSession->unsLastCartState();
+			$order = $observer->getOrder();
+			$this->quote->collectTotals();
+			$param = new EventOrderParam('order_add', $order->getCustomerId(), $this->quote->getGrandTotal(), $this->quote->getId());
+			$this->publisher->publish($param);
+		} catch (\Exception $e) {
+			$this->logger->error("Incomaker order_add failed: " . $e->getMessage());
+		}
 	}
 }
