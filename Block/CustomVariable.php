@@ -2,21 +2,42 @@
 
 namespace Incomaker\Magento2\Block;
 
-class CustomVariable extends \Magento\Framework\View\Element\Template
-{
-    protected $_varFactory;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Quote\Model\Quote;
+use Magento\Variable\Model\VariableFactory;
 
-    public function __construct(
-        \Magento\Variable\Model\VariableFactory $varFactory,
-        \Magento\Framework\View\Element\Template\Context $context)
-    {
-        $this->_varFactory = $varFactory;
-        parent::__construct($context);
-    }
+class CustomVariable extends Template {
 
-    public function getVariableValue($code) {
-        $var = $this->_varFactory->create();
-        $var->loadByCode($code);
-        return $var->getValue('text');
-    }
+	private Quote $quote;
+
+	protected $varFactory;
+
+	public function __construct(
+		CheckoutSession $checkoutSession,
+		VariableFactory $varFactory,
+		Context $context
+	) {
+		parent::__construct($context);
+		$this->varFactory = $varFactory;
+		$this->checkoutSession = $checkoutSession;
+		$this->quote = $this->checkoutSession->getQuote();
+
+	}
+
+	public function getVariableValue($code) {
+		$var = $this->varFactory->create();
+		$var->loadByCode($code);
+		return $var->getValue('text');
+	}
+
+	public function getCustomerId() {
+		return $this->quote->getCustomerId();
+	}
+
+	public function getSessionId() {
+		return $this->quote->getId();
+	}
+
 }
