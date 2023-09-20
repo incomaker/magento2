@@ -1,3 +1,0 @@
-docker exec -ti magento-docker-magento2 /bin/bash -c \
-	"cd /bitnami/magento && \
-	bin/magento module:status"

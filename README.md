@@ -1,96 +1,12 @@
 # Incomaker Plugin for Magento
 
-Sample: https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/next-steps/sample-data/composer-packages.html
+## Incomaker Customers
 
-Integrates **Incomaker** XML feeds and tracking API into Magento2.
-
-## Installation
-
-Go to the directory where your **Magento** is installed and run following:
-
-```
-composer require incomaker/magento2
-bin/magento setup:upgrade
-bin/magento setup:di:compile
-bin/magento cache:flush
-```
-
-Now open web browser, go to **Stores / Configuration**, change scope to **Main Website** 
-and finish plugin settings under section **Incomaker**. 
-
-Read more about plugin installation in the [Installation Instructions](https://support.incomaker.com/en/hc/2628921009/5/magento?category_id=4)
-
-## Plugin Development in Docker
-
-Information below is intended for plugin developers.
+This module for **Magento2** integrates Incomaker's XML feeds and tracking API into your e-shop.
 
 ### Installation
 
-Create configuration:
-
-    cp .env-example .env
-
-You can configure your own values inside `.env`, then run:
-
-    docker compose up -d
-
-Now you can visit:
-
-    http://localhost/admin
-
-
-Username and password are those you specified in `.env` file.
-Not secure! For development only!
-
-#### Read More about Magento in Docker...
-
-https://hub.docker.com/r/bitnami/magento/
-
-### Module Development
-
-Online sources about Magento module development:
-
-- https://developer.adobe.com/commerce/php/development/build/development-environment/
-- https://www.mageplaza.com/devdocs/magento-2-module-development/
-- https://meetanshi.com/blog/magento-2-module-development/
-
-#### MGT - Dev Env
-
-https://www.mgt-commerce.com/magento-2-local-development-environment
-
-Run:
-
-    ./mgt-dev
-
-now go to `https://localhost:8443/`.
-
-#### Install and Update Using Scripts
-
-Install the plugin (needed only once):
-
-    ./plugin-install
-
-You will need access key managed at Adobe `https://commercemarketplace.adobe.com/customer/accessKeys/`.
-Use account registered for `salamon@incomaker.com`. Use the Public key as your username and the Private key as your password.
-
-Update the plugin (needed after plugin installation and after each code change):
-
-    ./plugin-update
-
-#### Install Plugin Manually
-
-Log into the container:
-
-    docker exec -ti magento-docker-magento2 /bin/bash
-
-Go to Magento folder:
-
-    cd /bitnami/magento
-
-Get Incomaker plugin:
-
-You will need access key managed at Adobe `https://commercemarketplace.adobe.com/customer/accessKeys/`.
-Use account registered for `salamon@incomaker.com`. Use the Public key as your username and the Private key as your password.
+Go to the directory where your **Magento** is installed and run following:
 
 ```
 composer require incomaker/magento2
@@ -100,4 +16,124 @@ bin/magento cache:clean
 bin/magento cache:flush
 ```
 
-You might need to restart Docker container after this.
+Now open web browser, go to admin area of your e-shop, select **Stores / Configuration**, change scope to **Main Website**
+and finish plugin settings under section **Incomaker**.
+
+Read more about plugin installation in the [Installation Instructions](https://support.incomaker.com/en/hc/2628921009/5/magento?category_id=4)
+
+## Module Developers
+
+*NOTE: Information below is intended for developers of this Magento module.*
+
+Online sources about Magento2 module development:
+
+- https://developer.adobe.com/commerce/php/development/build/development-environment/
+- https://www.mageplaza.com/devdocs/magento-2-module-development/
+- https://meetanshi.com/blog/magento-2-module-development/
+
+### Update Dependencies Locally
+
+This will create `vendor` folder with all dependencies which is useful for code inspection inside IDE.
+
+    bin/composer-install
+
+### Set Up MGT - Development Environment
+
+Read about **MGT-DEV**: https://www.mgt-commerce.com/magento-2-local-development-environment
+
+#### Access Keys
+
+You will need access keys from Adobe: `https://commercemarketplace.adobe.com/customer/accessKeys/`.
+Use account registered for `salamon@incomaker.com`. Use the Public key as your username and the Private key as your password.
+
+#### Start MGT Environment
+
+Run:
+
+    bin/mgt-dev
+
+then go to UI: `https://localhost:8443/`
+
+- add domain (e.g. `incomaker.mgt`, Work dir: `incomaker.mgt/pub` - must end with `pub`)
+- edit `hosts` file and add the same domain
+- add database (e.g. `incomaker`)
+- add cron (e.g. `cd /home/cloudpanel/htdocs/incomaker.mgt && bin/magento cron:run`)
+
+#### SSH Into the MGT Environment
+
+All further commands must be issued via SSH:
+
+    ssh root@127.0.0.1
+
+#### Install Magento
+
+Create new project:
+
+    cd /home/cloudpanel/htdocs/
+    rm incomaker.mgt -rf
+    composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition incomaker.mgt
+
+Install Magento:
+
+    cd incomaker.mgt
+    bin/magento setup:install \
+        --backend-frontname='admin' --key='18Av6ITivOZG3gwY1DhMDWtlLfx1spLP' \
+        --session-save='files' --db-host='127.0.0.1' --db-name='incomaker' \
+        --db-user='incomaker' --db-password='incomaker' \
+        --base-url='http://incomaker.mgt/' --base-url-secure='https://incomaker.mgt/' \
+        --admin-user='admin' --admin-password='!admin123!' \
+        --admin-email='john@doe.com' --admin-firstname='John' --admin-lastname='Doe'
+    chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
+
+Disable Two-Factor:
+
+    bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
+
+Install Incomaker Module:
+
+    composer require incomaker/magento2
+    bin/magento setup:upgrade
+    bin/magento setup:di:compile
+    bin/magento cache:clean
+    bin/magento cache:flush
+    chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
+
+Activate Developer Mode:
+
+    bin/magento deploy:mode:set developer
+
+Convenience script (does all of the above):
+
+    bin/mgt-install
+
+#### Sync files
+
+You will have to configure file sync in your IDE between root folder of the project and
+`root:root@127.0.0.1:/home/cloudpanel/htdocs/incomaker.mgt/vendor/incomaker/magento2`
+
+After files are updated, you have to rebuild Magento DI:
+
+    bin/magento setup:di:compile
+    bin/magento cache:clean
+    bin/magento cache:flush
+    chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
+
+or simply `bin/mgt-update` from host or `mgt-update` from inside the container.
+
+#### View Logs
+
+    watch tail var/log/debug.log
+
+### Build and Deploy
+
+#### Deploy to Packagist
+
+- create and checkout new branch (e.g. `v1.1`)
+- increase version number inside `composer.json` (e.g. `1.1.4`)
+- commit
+- create new version tag (e.g. `1.1.4`)
+- push to **GitHub**
+
+#### Package as ZIP
+
+    bin/module-package

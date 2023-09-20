@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd"
+>
+	<exchange name="magento-db" type="topic" connection="db">
+		<binding
+			id="incomakerEventProductQueueBinding"
+			topic="incomaker.event.product"
+			destinationType="queue"
+			destination="incomaker.event.product"
+		/>
+		<binding
+			id="incomakerEventOrderQueueBinding"
+			topic="incomaker.event.order"
+			destinationType="queue"
+			destination="incomaker.event.order"
+		/>
+		<binding
+			id="incomakerEventUserQueueBinding"
+			topic="incomaker.event.user"
+			destinationType="queue"
+			destination="incomaker.event.user"
+		/>
+		<binding
+			id="incomakerEventAddContactQueueBinding"
+			topic="incomaker.event.add-contact"
+			destinationType="queue"
+			destination="incomaker.event.add-contact"
+		/>
+	</exchange>
+</config>

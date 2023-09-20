@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd"
+>
+	<consumer
+		name="incomaker.event.product"
+		queue="incomaker.event.product"
+		connection="db"
+		maxMessages="5000"
+		consumerInstance="Magento\Framework\MessageQueue\Consumer"
+		handler="Incomaker\Magento2\Async\EventProduct\EventProductConsumer::process"
+	/>
+	<consumer
+		name="incomaker.event.order"
+		queue="incomaker.event.order"
+		connection="db"
+		maxMessages="5000"
+		consumerInstance="Magento\Framework\MessageQueue\Consumer"
+		handler="Incomaker\Magento2\Async\EventOrder\EventOrderConsumer::process"
+	/>
+	<consumer
+		name="incomaker.event.user"
+		queue="incomaker.event.user"
+		connection="db"
+		maxMessages="5000"
+		consumerInstance="Magento\Framework\MessageQueue\Consumer"
+		handler="Incomaker\Magento2\Async\EventUser\EventUserConsumer::process"
+	/>
+	<consumer
+		name="incomaker.event.add-contact"
+		queue="incomaker.event.add-contact"
+		connection="db"
+		maxMessages="5000"
+		consumerInstance="Magento\Framework\MessageQueue\Consumer"
+		handler="Incomaker\Magento2\Async\EventAddContact\EventAddContactConsumer::process"
+	/>
+</config>

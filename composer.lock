@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c131df6b187d84c0a3ea16f742dfc014",
+    "content-hash": "5917f3d521986c2a0c3b4610574e1846",
     "packages": [
         {
             "name": "brick/math",
@@ -5080,6 +5080,75 @@
                 "OSL-3.0",
                 "AFL-3.0"
             ]
+        },
+        {
+            "name": "magento/module-webapi",
+            "version": "100.4.5",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-webapi/magento-module-webapi-100.4.5.0.zip",
+                "shasum": "abfe68c4f9f49c0ac052721bd7d9f43835284867"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "magento/module-authorization": "100.4.*",
+                "magento/module-backend": "102.0.*",
+                "magento/module-integration": "100.4.*",
+                "magento/module-store": "101.1.*",
+                "php": "~8.1.0||~8.2.0"
+            },
+            "suggest": {
+                "magento/module-customer": "103.0.*",
+                "magento/module-user": "101.2.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\Webapi\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
+        },
+        {
+            "name": "magento/module-webapi-async",
+            "version": "100.4.4",
+            "dist": {
+                "type": "zip",
+                "url": "https://repo.magento.com/archives/magento/module-webapi-async/magento-module-webapi-async-100.4.4.0.zip",
+                "shasum": "126e883fc6f727107a67cfad9035a24b45296a3e"
+            },
+            "require": {
+                "magento/framework": "103.0.*",
+                "magento/module-asynchronous-operations": "100.4.*",
+                "magento/module-store": "101.1.*",
+                "magento/module-webapi": "100.4.*",
+                "php": "~8.1.0||~8.2.0"
+            },
+            "suggest": {
+                "magento/module-customer": "103.0.*",
+                "magento/module-user": "101.2.*"
+            },
+            "type": "magento2-module",
+            "autoload": {
+                "files": [
+                    "registration.php"
+                ],
+                "psr-4": {
+                    "Magento\\WebapiAsync\\": ""
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "N/A"
         },
         {
             "name": "magento/module-widget",
