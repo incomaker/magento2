@@ -1,4 +1,4 @@
-# Incomaker Plugin for Magento
+# Incomaker Module for Magento2
 
 ## Incomaker Customers
 
@@ -17,9 +17,13 @@ bin/magento cache:flush
 ```
 
 Now open web browser, go to admin area of your e-shop, select **Stores / Configuration**, change scope to **Main Website**
-and finish plugin settings under section **Incomaker**.
+and finish module settings under section **Incomaker**.
 
 Read more about plugin installation in the [Installation Instructions](https://support.incomaker.com/en/hc/2628921009/5/magento?category_id=4)
+
+When module is successfully installed and configured, you will be able to access XML feeds:
+
+    https://<your-domain>/incomaker/data/feed?key=<your-api-key>&type=product
 
 ## Module Developers
 

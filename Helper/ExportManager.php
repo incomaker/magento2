@@ -2,30 +2,35 @@
 
 namespace Incomaker\Magento2\Helper;
 
-class ExportManager
-{
+class ExportManager {
 
-    protected $exports;
+	protected $exports;
 
-    public function __construct(
-        \Incomaker\Magento2\Helper\ContactExport $contactExport,
-        \Incomaker\Magento2\Helper\CategoryExport $categoryExport,
-        \Incomaker\Magento2\Helper\ProductExport $productExport,
-        \Incomaker\Magento2\Helper\OrderExport $orderExport,
-        \Incomaker\Magento2\Helper\CouponExport $couponExport
-    ) {
-        $this->addExport($contactExport);
-        $this->addExport($categoryExport);
-        $this->addExport($productExport);
-        $this->addExport($orderExport);
-        $this->addExport($couponExport);
-    }
+	public function __construct(
+		ContactExport $contactExport,
+		CategoryExport $categoryExport,
+		ProductExport $productExport,
+		OrderExport $orderExport,
+		CouponExport $couponExport,
+		InfoExport $infoExport
+	) {
+		$this->addExport($contactExport);
+		$this->addExport($categoryExport);
+		$this->addExport($productExport);
+		$this->addExport($orderExport);
+		$this->addExport($couponExport);
+		$this->addExport($infoExport);
+	}
 
-    protected function addExport(\Incomaker\Magento2\Helper\XmlExport $export) {
-        $this->exports[$export::$name] = $export;
-    }
+	protected function addExport(XmlExport $export) {
+		$this->exports[$export::$name] = $export;
+	}
 
-    public function getExport($name) {
-        return $this->exports[$name];
-    }
+	public function getExport($name) {
+		return $this->exports[$name];
+	}
+
+	public function exportExists($name): bool {
+		return isset($this->exports[$name]);
+	}
 }
