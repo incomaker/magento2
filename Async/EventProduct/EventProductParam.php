@@ -2,23 +2,23 @@
 
 namespace Incomaker\Magento2\Async\EventProduct;
 
-class EventProductParam {
+use Incomaker\Magento2\Async\ParamBase;
 
-	public string $eventName;
+class EventProductParam extends ParamBase {
 
 	public $customerId;
 
-	public string $productId;
+	public $productId;
 
-	public string $sessionId;
+	public $sessionId;
 
 	public function __construct(
 		string $eventName,
 		$customerId,
-		string $productId,
-		string $sessionId
+		$productId,
+		$sessionId
 	) {
-		$this->eventName = $eventName;
+		parent::__construct($eventName);
 		$this->customerId = $customerId;
 		$this->productId = $productId;
 		$this->sessionId = $sessionId;

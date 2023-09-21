@@ -4,12 +4,12 @@ namespace Incomaker\Magento2\Async\EventUser;
 
 use Incomaker\Magento2\Async\ConsumerBase;
 
-class EventUserConsumer extends ConsumerBase {
+class EventUserEventConsumer extends ConsumerBase {
 
 	/**
 	 * @param EventUserParam $param
 	 */
 	protected function consume($param) {
-		$this->incomakerApi->sendUserEvent($param->eventName, $param->customerId);
+		$this->incomakerApi->sendUserEvent($param->eventName, $param->customerId, $param->time);
 	}
 }

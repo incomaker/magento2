@@ -2,9 +2,9 @@
 
 namespace Incomaker\Magento2\Async\EventOrder;
 
-class EventOrderParam {
+use Incomaker\Magento2\Async\ParamBase;
 
-	public string $eventName;
+class EventOrderParam extends ParamBase {
 
 	public $customerId;
 
@@ -18,7 +18,7 @@ class EventOrderParam {
 		$total,
 		string $sessionId
 	) {
-		$this->eventName = $eventName;
+		parent::__construct($eventName);
 		$this->customerId = $customerId;
 		$this->total = $total;
 		$this->sessionId = $sessionId;

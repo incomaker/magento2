@@ -2,10 +2,10 @@
 
 namespace Incomaker\Magento2\Observer;
 
+use Incomaker\Magento2\Async\EventAddContact\EventAddContactEventPublisher;
 use Incomaker\Magento2\Async\EventAddContact\EventAddContactParam;
-use Incomaker\Magento2\Async\EventAddContact\EventAddContactPublisher;
+use Incomaker\Magento2\Async\EventUser\EventUserEventPublisher;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
-use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -16,8 +16,8 @@ class ContactRegistration implements ObserverInterface {
 	private $userPublisher;
 
 	public function __construct(
-		EventAddContactPublisher $addContactPublisher,
-		EventUserPublisher $userPublisher
+		EventAddContactEventPublisher $addContactPublisher,
+		EventUserEventPublisher $userPublisher
 	) {
 		$this->addContactPublisher = $addContactPublisher;
 		$this->userPublisher = $userPublisher;

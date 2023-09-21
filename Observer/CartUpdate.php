@@ -2,8 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
+use Incomaker\Magento2\Async\EventProduct\EventProductEventPublisher;
 use Incomaker\Magento2\Async\EventProduct\EventProductParam;
-use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 class CartUpdate implements ObserverInterface {
 
-	private EventProductPublisher $publisher;
+	private EventProductEventPublisher $publisher;
 
 	private CheckoutSession $checkoutSession;
 
@@ -21,7 +21,7 @@ class CartUpdate implements ObserverInterface {
 	private LoggerInterface $logger;
 
 	public function __construct(
-		EventProductPublisher $publisher,
+		EventProductEventPublisher $publisher,
 		CheckoutSession $checkoutSession,
 		CustomerSession $customerSession,
 		LoggerInterface $logger
@@ -42,7 +42,7 @@ class CartUpdate implements ObserverInterface {
 			$new_cart[] = $item->getSku();
 		}
 
-		$cart_serialized = $this->customerSession->getLastCartState();
+		$cart_serialized = $this->checkoutSession->getLastCartState();
 		$old_cart = empty($cart_serialized) ? [] : unserialize($cart_serialized);
 
 		$added = array_diff($new_cart, $old_cart);
@@ -56,6 +56,6 @@ class CartUpdate implements ObserverInterface {
 			$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
 		}
 
-		$this->customerSession->setLastCartState(serialize($new_cart));
+		$this->checkoutSession->setLastCartState(serialize($new_cart));
 	}
 }

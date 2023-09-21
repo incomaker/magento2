@@ -2,9 +2,9 @@
 
 namespace Incomaker\Magento2\Async\EventUser;
 
-class EventUserParam {
+use Incomaker\Magento2\Async\ParamBase;
 
-	public string $eventName;
+class EventUserParam extends ParamBase {
 
 	public $customerId;
 
@@ -12,7 +12,7 @@ class EventUserParam {
 		string $eventName,
 		$customerId
 	) {
-		$this->eventName = $eventName;
+		parent::__construct($eventName);
 		$this->customerId = $customerId;
 	}
 

@@ -2,8 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
+use Incomaker\Magento2\Async\EventOrder\EventOrderEventPublisher;
 use Incomaker\Magento2\Async\EventOrder\EventOrderParam;
-use Incomaker\Magento2\Async\EventOrder\EventOrderPublisher;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 class OrderAdd implements ObserverInterface {
 
-	private EventOrderPublisher $publisher;
+	private EventOrderEventPublisher $publisher;
 
 	private CustomerSession $customerSession;
 
@@ -21,7 +21,7 @@ class OrderAdd implements ObserverInterface {
 	private LoggerInterface $logger;
 
 	public function __construct(
-		EventOrderPublisher $publisher,
+		EventOrderEventPublisher $publisher,
 		CustomerSession $customerSession,
 		Quote $quote,
 		LoggerInterface $logger

@@ -55,10 +55,10 @@ class IncomakerApi {
 		return $this->cookieManager->getCookie("incomaker_c");
 	}
 
-	public function sendUserEvent($event, $customerId) {
+	public function sendUserEvent($event, $customerId, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($event, $this->getPermId());
+		$event = new Event($event, $this->getPermId(), $time);
 
 		if (isset($customerId)) {
 			$event->setClientContactId($customerId);
@@ -69,10 +69,10 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function sendProductEvent($event, $customerId, $productId, $sessionId) {
+	public function sendProductEvent($eventName, $customerId, $productId, $sessionId, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($event, $this->getPermId());
+		$event = new Event($eventName, $this->getPermId(), $time);
 
 		if (!empty($customerId)) {
 			$event->setClientContactId($customerId);
@@ -86,13 +86,14 @@ class IncomakerApi {
 		if (!isset($this->eventController)) {
 			$this->eventController = $this->incomaker->createEventController();
 		}
+		$this->logger->debug($event->getData());
 		$this->eventController->addEvent($event);
 	}
 
-	public function sendOrderEvent($event, $customerId, $total, $session) {
+	public function sendOrderEvent($event, $customerId, $total, $session, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($event, $this->getPermId());
+		$event = new Event($event, $this->getPermId(), $time);
 
 		if (isset($customerId)) {
 			$event->setClientContactId($customerId);
