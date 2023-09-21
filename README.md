@@ -63,6 +63,12 @@ then go to UI: `https://localhost:8443/`
 - add database (e.g. `incomaker`)
 - add cron (e.g. `cd /home/cloudpanel/htdocs/incomaker.mgt && bin/magento cron:run`)
 
+Now use convenience script to create Magento project
+
+    bin/mgt-install <instance_name, e.g. incomaker>
+
+or do it the hard way:
+
 #### SSH Into the MGT Environment
 
 All further commands must be issued via SSH:
