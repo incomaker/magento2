@@ -17,7 +17,7 @@
 		"magento/module-quote": "*",
 		"magento/module-customer": "*",
 		"magento/module-webapi-async": "*",
-		"incomaker/api": "^3.1.10"
+		"incomaker/api": "^3.1.12"
 	},
 	"license": "GPL-2.0-or-later",
 	"autoload": {

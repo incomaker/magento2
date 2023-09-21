@@ -4,7 +4,7 @@ namespace Incomaker\Magento2\Async\EventUser;
 
 use Incomaker\Magento2\Async\ConsumerBase;
 
-class EventUserEventConsumer extends ConsumerBase {
+class EventUserConsumer extends ConsumerBase {
 
 	/**
 	 * @param EventUserParam $param

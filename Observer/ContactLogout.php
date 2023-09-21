@@ -2,8 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Async\EventUser\EventUserEventPublisher;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
+use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -12,7 +12,7 @@ class ContactLogout implements ObserverInterface {
 	private $publisher;
 
 	public function __construct(
-		EventUserEventPublisher $publisher
+		EventUserPublisher $publisher
 	) {
 		$this->publisher = $publisher;
 	}

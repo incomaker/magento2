@@ -2,8 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Async\EventProduct\EventProductEventPublisher;
 use Incomaker\Magento2\Async\EventProduct\EventProductParam;
+use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 class CartUpdate implements ObserverInterface {
 
-	private EventProductEventPublisher $publisher;
+	private EventProductPublisher $publisher;
 
 	private CheckoutSession $checkoutSession;
 
@@ -21,7 +21,7 @@ class CartUpdate implements ObserverInterface {
 	private LoggerInterface $logger;
 
 	public function __construct(
-		EventProductEventPublisher $publisher,
+		EventProductPublisher $publisher,
 		CheckoutSession $checkoutSession,
 		CustomerSession $customerSession,
 		LoggerInterface $logger

@@ -72,7 +72,11 @@ class IncomakerApi {
 	public function sendProductEvent($eventName, $customerId, $productId, $sessionId, $time = null) {
 		if (!$this->checkSettings()) return;
 
+		$this->logger->debug($time == null ? 'null' : $time->format("c"));
+
 		$event = new Event($eventName, $this->getPermId(), $time);
+
+		$this->logger->debug($event->getData());
 
 		if (!empty($customerId)) {
 			$event->setClientContactId($customerId);

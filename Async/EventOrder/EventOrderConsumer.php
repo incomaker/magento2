@@ -4,7 +4,7 @@ namespace Incomaker\Magento2\Async\EventOrder;
 
 use Incomaker\Magento2\Async\ConsumerBase;
 
-class EventOrderEventConsumer extends ConsumerBase {
+class EventOrderConsumer extends ConsumerBase {
 
 	/**
 	 * @param EventOrderParam $param

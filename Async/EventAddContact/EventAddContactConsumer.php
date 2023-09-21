@@ -4,7 +4,7 @@ namespace Incomaker\Magento2\Async\EventAddContact;
 
 use Incomaker\Magento2\Async\ConsumerBase;
 
-class EventAddContactEventConsumer extends ConsumerBase {
+class EventAddContactConsumer extends ConsumerBase {
 
 	/**
 	 * @param EventAddContactParam $param

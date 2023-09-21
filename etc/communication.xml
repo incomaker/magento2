@@ -4,16 +4,16 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd"
 >
 	<topic name="incomaker.event.product" request="string">
-		<handler name="incomakerEventProductHandler" type="Incomaker\Magento2\Async\EventProduct\EventProductEventConsumer" method="process"/>
+		<handler name="incomakerEventProductHandler" type="Incomaker\Magento2\Async\EventProduct\EventProductConsumer" method="process"/>
 	</topic>
 	<topic name="incomaker.event.order" request="string">
-		<handler name="incomakerEventOrderHandler" type="Incomaker\Magento2\Async\EventOrder\EventOrderEventConsumer" method="process"/>
+		<handler name="incomakerEventOrderHandler" type="Incomaker\Magento2\Async\EventOrder\EventOrderConsumer" method="process"/>
 	</topic>
 	<topic name="incomaker.event.user" request="string">
-		<handler name="incomakerEventUserHandler" type="Incomaker\Magento2\Async\EventUser\EventUserEventConsumer" method="process"/>
+		<handler name="incomakerEventUserHandler" type="Incomaker\Magento2\Async\EventUser\EventUserConsumer" method="process"/>
 	</topic>
 	<topic name="incomaker.event.add-contact" request="string">
-		<handler name="incomakerEventAddContactHandler" type="Incomaker\Magento2\Async\EventAddContact\EventAddContactEventConsumer"
+		<handler name="incomakerEventAddContactHandler" type="Incomaker\Magento2\Async\EventAddContact\EventAddContactConsumer"
 				 method="process"/>
 	</topic>
 </config>

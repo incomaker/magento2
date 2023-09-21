@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccb185d74fd9f5503ea6b0e9acb44d5c",
+    "content-hash": "f72cd73b04dea46aca12dcbff0a17210",
     "packages": [
         {
             "name": "brick/math",
@@ -1170,16 +1170,16 @@
         },
         {
             "name": "incomaker/api",
-            "version": "3.1.10",
+            "version": "3.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/incomaker/api.git",
-                "reference": "a93d669af12e017fd01fd1ed00285aeb7bb06d21"
+                "reference": "f721f4fc7f8863c03d692db60eed18c227cd916a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/incomaker/api/zipball/a93d669af12e017fd01fd1ed00285aeb7bb06d21",
-                "reference": "a93d669af12e017fd01fd1ed00285aeb7bb06d21",
+                "url": "https://api.github.com/repos/incomaker/api/zipball/f721f4fc7f8863c03d692db60eed18c227cd916a",
+                "reference": "f721f4fc7f8863c03d692db60eed18c227cd916a",
                 "shasum": ""
             },
             "require": {
@@ -1205,9 +1205,9 @@
             "description": "Incomaker API library",
             "support": {
                 "issues": "https://github.com/incomaker/api/issues",
-                "source": "https://github.com/incomaker/api/tree/3.1.10"
+                "source": "https://github.com/incomaker/api/tree/3.1.11"
             },
-            "time": "2023-09-21T13:07:25+00:00"
+            "time": "2023-09-21T14:21:56+00:00"
         },
         {
             "name": "justinrainbow/json-schema",

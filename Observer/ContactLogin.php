@@ -2,8 +2,8 @@
 
 namespace Incomaker\Magento2\Observer;
 
-use Incomaker\Magento2\Async\EventUser\EventUserEventPublisher;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
+use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
@@ -15,10 +15,10 @@ class ContactLogin implements ObserverInterface {
 
 	private CustomerSession $customerSession;
 
-	private EventUserEventPublisher $publisher;
+	private EventUserPublisher $publisher;
 
 	public function __construct(
-		EventUserEventPublisher $publisher,
+		EventUserPublisher $publisher,
 		CheckoutSession $checkoutSession,
 		CustomerSession $customerSession
 	) {
