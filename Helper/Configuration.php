@@ -21,7 +21,7 @@ class Configuration extends AbstractHelper {
 		$this->configWriter = $configWriter;
 	}
 
-	public function getConfig($config_path, $default = NULL): mixed	{
+	public function getConfig($config_path, $default = NULL) {
 		return $this->scopeConfig->getValue($config_path, self::CONFIG_SCOPE) ?? $default;
 	}
 
