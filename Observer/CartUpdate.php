@@ -5,10 +5,9 @@ namespace Incomaker\Magento2\Observer;
 use Incomaker\Magento2\Async\EventProduct\EventProductParam;
 use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Psr\Log\LoggerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class CartUpdate implements ObserverInterface {
 
@@ -16,20 +15,16 @@ class CartUpdate implements ObserverInterface {
 
 	private CheckoutSession $checkoutSession;
 
-	private CustomerSession $customerSession;
-
-	private LoggerInterface $logger;
+	private SerializerInterface $serializer;
 
 	public function __construct(
 		EventProductPublisher $publisher,
 		CheckoutSession $checkoutSession,
-		CustomerSession $customerSession,
-		LoggerInterface $logger
+		SerializerInterface $serializer
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
-		$this->customerSession = $customerSession;
-		$this->logger = $logger;
+		$this->serializer = $serializer;
 	}
 
 	public function execute(Observer $observer) {
@@ -43,7 +38,7 @@ class CartUpdate implements ObserverInterface {
 		}
 
 		$cart_serialized = $this->checkoutSession->getLastCartState();
-		$old_cart = empty($cart_serialized) ? [] : unserialize($cart_serialized);
+		$old_cart = empty($cart_serialized) ? [] : $this->serializer->unserialize($cart_serialized);
 
 		$added = array_diff($new_cart, $old_cart);
 		$removed = array_diff($old_cart, $new_cart);
@@ -56,6 +51,6 @@ class CartUpdate implements ObserverInterface {
 			$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
 		}
 
-		$this->checkoutSession->setLastCartState(serialize($new_cart));
+		$this->checkoutSession->setLastCartState($this->serializer->serialize($new_cart));
 	}
 }

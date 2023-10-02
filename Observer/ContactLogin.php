@@ -8,6 +8,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 class ContactLogin implements ObserverInterface {
 
@@ -17,14 +18,16 @@ class ContactLogin implements ObserverInterface {
 
 	private EventUserPublisher $publisher;
 
+	private SerializerInterface $serializer;
+
 	public function __construct(
 		EventUserPublisher $publisher,
 		CheckoutSession $checkoutSession,
-		CustomerSession $customerSession
+		SerializerInterface $serializer
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
-		$this->customerSession = $customerSession;
+		$this->serializer = $serializer;
 	}
 
 	public function execute(Observer $observer) {
@@ -36,7 +39,7 @@ class ContactLogin implements ObserverInterface {
 		foreach ($quote->getAllVisibleItems() as $item) {
 			$cart[] = $item->getSku();
 		}
-		$this->checkoutSession->setLastCartState(serialize($cart));
+		$this->checkoutSession->setLastCartState($this->serializer->serialize($cart));
 
 	}
 }
