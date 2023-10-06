@@ -13,7 +13,7 @@ class EventProductParam extends ParamBase {
 	public $sessionId;
 
 	public function __construct(
-		string $eventName,
+		$eventName,
 		$customerId,
 		$productId,
 		$sessionId
