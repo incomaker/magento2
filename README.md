@@ -50,6 +50,12 @@ Read about **MGT-DEV**: https://www.mgt-commerce.com/magento-2-local-development
 You will need access keys from Adobe: `https://commercemarketplace.adobe.com/customer/accessKeys/`.
 Use account registered for `salamon@incomaker.com`. Use the Public key as your username and the Private key as your password.
 
+Create `auth.json` file:
+
+    cp auth.json.example auth.json
+
+and paste Adobe keys into it.
+
 #### Start MGT Environment
 
 Run:
@@ -114,9 +120,13 @@ Activate Developer Mode:
 
 Convenience script (does all of the above):
 
-    bin/mgt-install <domain-name>
+    bin/mgt-install <domain-name> <optional:magento-version> <optional:php-version>
 
-#### Sync files
+Example:
+
+     bin/mgt-install test7 2.4.3-p3 7.4
+
+#### Sync Files
 
 You will have to configure file sync in your IDE between root folder of the project and
 `root:root@127.0.0.1:/home/cloudpanel/htdocs/incomaker.mgt/vendor/incomaker/magento2`
@@ -133,6 +143,15 @@ or simply `bin/mgt-update` from host or `mgt-update` from inside the container.
 #### View Logs
 
     watch tail var/log/debug.log
+
+#### Use Different version of PHP and/or Magento
+
+to use different PHP version:
+
+    bin/mgt-ssh
+    alias php="/usr/bin/php7.4"
+
+
 
 ### Build and Deploy
 
