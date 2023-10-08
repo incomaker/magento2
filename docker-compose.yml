@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  dbdata:
+  paneldata:
+
+services:
+
+  mgt-dev:
+    container_name: mgt-dev
+    image: mgtcommerce/mgt-dev:v3
+    restart: no
+    volumes:
+      - dbdata:/var/lib/mysql
+      - paneldata:/home/cloudpanel
+      - ./bin/docker:/usr/local/sbin
+      - ./auth.json:/root/.config/composer/auth.json
+    ports:
+      - 80:80
+      - 443:443
+      - 8443:8443
+      - 22:22
+      - 3306:3306
+      - 9200:9200
+      - 15672:15672

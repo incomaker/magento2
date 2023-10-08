@@ -60,7 +60,7 @@ then go to UI: `https://localhost:8443/`
 
 - add domain (e.g. `incomaker.mgt`, Work dir: `incomaker.mgt/pub` - must end with `pub`)
 - edit `hosts` file and add the same domain
-- add database (e.g. `incomaker`)
+- add database (e.g. `incomaker`, set password to `dbpass` in order to make convenience scripts work)
 - add cron (e.g. `cd /home/cloudpanel/htdocs/incomaker.mgt && bin/magento cron:run`)
 
 Now use convenience script to create Magento project
@@ -114,7 +114,7 @@ Activate Developer Mode:
 
 Convenience script (does all of the above):
 
-    bin/mgt-install
+    bin/mgt-install <domain-name>
 
 #### Sync files
 
