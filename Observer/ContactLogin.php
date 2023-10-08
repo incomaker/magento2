@@ -8,6 +8,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Psr\Log\LoggerInterface;
 
 class ContactLogin implements ObserverInterface {
 
@@ -17,26 +18,33 @@ class ContactLogin implements ObserverInterface {
 
 	private EventUserPublisher $publisher;
 
+	private LoggerInterface $logger;
+
 	public function __construct(
 		EventUserPublisher $publisher,
 		CheckoutSession $checkoutSession,
-		CustomerSession $customerSession
+		CustomerSession $customerSession,
+		LoggerInterface $logger
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
 		$this->customerSession = $customerSession;
+		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer) {
-		$customer = $observer->getData('customer');
-		$this->publisher->publish(new EventUserParam('login', $customer->getId()));
+		try {
+			$customer = $observer->getData('customer');
+			$this->publisher->publish(new EventUserParam('login', $customer->getId()));
 
-		$quote = $this->checkoutSession->getQuote();
-		$cart = [];
-		foreach ($quote->getAllVisibleItems() as $item) {
-			$cart[] = $item->getSku();
+			$quote = $this->checkoutSession->getQuote();
+			$cart = [];
+			foreach ($quote->getAllVisibleItems() as $item) {
+				$cart[] = $item->getSku();
+			}
+			$this->checkoutSession->setLastCartState(serialize($cart));
+		} catch (\Exception $e) {
+			$this->logger->error("Incomaker login event failed: " . $e->getMessage());
 		}
-		$this->checkoutSession->setLastCartState(serialize($cart));
-
 	}
 }

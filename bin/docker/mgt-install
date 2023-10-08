@@ -1,20 +1,26 @@
+instance_name=${1:-magento1}
+magento_version=${2:-latest}
+php_version=${3}
+
 cd /home/cloudpanel/htdocs/
-rm incomaker.mgt -rf
-composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition incomaker.mgt
-cd incomaker.mgt
-bin/magento setup:install \
+rm ${instance_name}.mgt -rf
+php${php_version} /usr/local/bin/composer create-project --repository-url=https://repo.magento.com/ \
+    magento/project-community-edition=${magento_version} ${instance_name}.mgt
+cd ${instance_name}.mgt
+php${php_version} bin/magento setup:install \
     --backend-frontname='admin' --key='18Av6ITivOZG3gwY1DhMDWtlLfx1spLP' \
-    --session-save='files' --db-host='127.0.0.1' --db-name='incomaker' \
-    --db-user='incomaker' --db-password='incomaker' \
-    --base-url='http://incomaker.mgt/' --base-url-secure='https://incomaker.mgt/' \
-    --admin-user='admin' --admin-password='!admin123!' \
+    --session-save='files' --db-host='127.0.0.1' --db-name="${instance_name}" \
+    --db-user="${instance_name}" --db-password="dbpass" \
+    --base-url="https://${instance_name}.mgt/" --base-url-secure="https://${instance_name}.mgt/" \
+    --admin-user='admin' --admin-password='admin123' \
     --admin-email='john@doe.com' --admin-firstname='John' --admin-lastname='Doe'
 chmod -R 777 .
-bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth Magento_TwoFactorAuth
-composer require incomaker/magento2
-bin/magento setup:upgrade
-bin/magento setup:di:compile
-bin/magento cache:clean
-bin/magento cache:flush
+php${php_version} bin/magento module:disable Magento_TwoFactorAuth
+php${php_version} bin/magento module:disable Magento_AdminAdobeImsTwoFactorAuth
+php${php_version} /usr/local/bin/composer require incomaker/magento2
+php${php_version} bin/magento setup:upgrade
+php${php_version} bin/magento setup:di:compile
+php${php_version} bin/magento cache:clean
+php${php_version} bin/magento cache:flush
 chmod -R 777 .
-bin/magento deploy:mode:set developer
+php${php_version} bin/magento deploy:mode:set developer

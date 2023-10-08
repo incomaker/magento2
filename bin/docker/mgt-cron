@@ -1,1 +1,4 @@
-bin/magento cron:run
+php_version=${1}
+
+php${php_version} bin/magento cron:run
+

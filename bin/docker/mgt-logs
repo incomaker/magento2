@@ -1,1 +1,1 @@
-watch "tail var/log/debug.log -n 30"
+watch "tail var/log/debug.log -n 40"

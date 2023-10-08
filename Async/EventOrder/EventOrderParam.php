@@ -10,13 +10,13 @@ class EventOrderParam extends ParamBase {
 
 	public $total;
 
-	public string $sessionId;
+	public $sessionId;
 
 	public function __construct(
-		string $eventName,
+		$eventName,
 		$customerId,
 		$total,
-		string $sessionId
+		$sessionId
 	) {
 		parent::__construct($eventName);
 		$this->customerId = $customerId;
