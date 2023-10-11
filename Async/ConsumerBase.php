@@ -3,6 +3,7 @@
 namespace Incomaker\Magento2\Async;
 
 use Incomaker\Magento2\Helper\IncomakerApi;
+use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class ConsumerBase extends AsyncBase {
@@ -11,9 +12,10 @@ abstract class ConsumerBase extends AsyncBase {
 
 	public function __construct(
 		LoggerInterface $logger,
-		IncomakerApi $incomakerApi
+		IncomakerApi $incomakerApi,
+		SerializerInterface $serializer
 	) {
-		parent::__construct($logger);
+		parent::__construct($logger, $serializer);
 		$this->incomakerApi = $incomakerApi;
 	}
 

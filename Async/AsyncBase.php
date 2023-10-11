@@ -23,8 +23,13 @@ abstract class AsyncBase {
 		return $this->serializer->serialize($param);
 	}
 
-	protected function deserialize(string $str) {
-		return $this->serializer->unserialize($str);
+	protected function deserialize(string $str): ?object {
+		try {
+			return (object)$this->serializer->unserialize($str);
+		} catch (\Exception $e) {
+			$this->logger->error("Error when deserializing queue message: $str");
+			return null;
+		}
 	}
 
 }
