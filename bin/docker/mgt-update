@@ -1,8 +1,10 @@
+php_version=${1}
+
 chmod -R 777 .
-bin/magento setup:upgrade
+php${php_version} bin/magento setup:upgrade
 chmod -R 777 .
-bin/magento setup:di:compile
+php${php_version} bin/magento setup:di:compile
 chmod -R 777 .
-bin/magento cache:clean
-bin/magento cache:flush
+php${php_version} bin/magento cache:clean
+php${php_version} bin/magento cache:flush
 chmod -R 777 .

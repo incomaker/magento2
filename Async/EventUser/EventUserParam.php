@@ -9,7 +9,7 @@ class EventUserParam extends ParamBase {
 	public $customerId;
 
 	public function __construct(
-		string $eventName,
+		$eventName,
 		$customerId
 	) {
 		parent::__construct($eventName);

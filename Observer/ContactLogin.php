@@ -24,22 +24,29 @@ class ContactLogin implements ObserverInterface {
 		EventUserPublisher $publisher,
 		CheckoutSession $checkoutSession,
 		SerializerInterface $serializer
+		CustomerSession $customerSession,
+		LoggerInterface $logger
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
 		$this->serializer = $serializer;
+		$this->customerSession = $customerSession;
+		$this->logger = $logger;
 	}
 
 	public function execute(Observer $observer) {
-		$customer = $observer->getData('customer');
-		$this->publisher->publish(new EventUserParam('login', $customer->getId()));
+		try {
+			$customer = $observer->getData('customer');
+			$this->publisher->publish(new EventUserParam('login', $customer->getId()));
 
-		$quote = $this->checkoutSession->getQuote();
-		$cart = [];
-		foreach ($quote->getAllVisibleItems() as $item) {
-			$cart[] = $item->getSku();
+			$quote = $this->checkoutSession->getQuote();
+			$cart = [];
+			foreach ($quote->getAllVisibleItems() as $item) {
+				$cart[] = $item->getSku();
+			}
+			$this->checkoutSession->setLastCartState(serialize($cart));
+		} catch (\Exception $e) {
+			$this->logger->error("Incomaker login event failed: " . $e->getMessage());
 		}
-		$this->checkoutSession->setLastCartState($this->serializer->serialize($cart));
-
 	}
 }
