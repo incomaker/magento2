@@ -1,0 +1,1 @@
+sudo docker run --rm --interactive --tty --volume $PWD:/app composer vendor/bin/phpstan analyse .
