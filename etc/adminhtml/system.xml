@@ -1,72 +1,78 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
-    <system>
-        <tab id="incomaker" translate="label" sortOrder="400">
-            <label>Incomaker</label>
-        </tab>
-        <section id="config" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1"
-                 showInStore="1">
-            <label>Marketing automation with artificial intelligence</label>
-            <tab>incomaker</tab>
-            <resource>Incomaker_Magento2::config</resource>
-            <group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Setup</label>
-                <attribute type="expanded">1</attribute>
-                <field id="module_version" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Module Version</label>
-                    <frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
-                    <comment>Stores could be connected to Incomaker via Website settings.</comment>
-                </field>
-                <field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>API Key</label>
-                    <config_path>incomaker/settings/api_key</config_path>
-                </field>
-                <field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Account ID</label>
-                    <config_path>incomaker/settings/account_id</config_path>
-                </field>
-                <field id="plugin_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Plugin ID</label>
-                    <config_path>incomaker/settings/plugin_id</config_path>
-                </field>
-            </group>
-            <group id="images" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
-                <label>Images</label>
-                <attribute type="expanded">1</attribute>
-                <field id="image_type" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Image type</label>
-                    <comment>Advanced: Size of the product images for exporting. Default is product_small_image.</comment>
-                    <config_path>incomaker/images/image_type</config_path>
-                </field>
-            </group>
-            <group id="auto_generated_coupon_codes" translate="label" showInDefault="0" showInWebsite="1" showInStore="0" sortOrder="10">
-                <label>Auto Generated Specific Coupon Codes</label>
-                <field id="length" translate="label comment" type="text" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Code Length</label>
-                    <comment>Excluding prefix, suffix and separators. Default is 12.</comment>
-                    <frontend_class>validate-digits</frontend_class>
-                    <config_path>incomaker/auto_generated_coupon_codes/length</config_path>
-                </field>
-                <field id="format" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Code Format</label>
-                    <source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
-                    <config_path>incomaker/auto_generated_coupon_codes/format</config_path>
-                </field>
-                <field id="prefix" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Code Prefix</label>
-                    <config_path>incomaker/auto_generated_coupon_codes/prefix</config_path>
-                </field>
-                <field id="suffix" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Code Suffix</label>
-                    <config_path>incomaker/auto_generated_coupon_codes/suffix</config_path>
-                </field>
-                <field id="dash" translate="label comment" type="text" sortOrder="50" showInDefault="0" showInWebsite="1" showInStore="0">
-                    <label>Dash Every X Characters</label>
-                    <comment>If empty no separation.</comment>
-                    <frontend_class>validate-digits</frontend_class>
-                    <config_path>incomaker/auto_generated_coupon_codes/dash</config_path>
-                </field>
-            </group>
-        </section>
-    </system>
+		xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<tab id="incomaker" translate="label" sortOrder="400">
+			<label>Incomaker</label>
+		</tab>
+		<section id="moduleconfig" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1"
+				 showInStore="1">
+			<label>Marketing automation with artificial intelligence</label>
+			<tab>incomaker</tab>
+			<resource>Incomaker_Magento2::config</resource>
+			<group id="settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>Setup</label>
+				<attribute type="expanded">1</attribute>
+				<field id="module_version" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Module Version</label>
+					<frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
+					<comment>Stores could be connected to Incomaker via Website settings.</comment>
+				</field>
+				<field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<backend_model>Magento\Contact\Model\System\Config\Backend\Links</backend_model>
+					<config_path>incomaker/settings/enabled</config_path>
+				</field>
+				<field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>API Key</label>
+					<config_path>incomaker/settings/api_key</config_path>
+				</field>
+				<field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Account ID</label>
+					<config_path>incomaker/settings/account_id</config_path>
+				</field>
+				<field id="plugin_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Plugin ID</label>
+					<config_path>incomaker/settings/plugin_id</config_path>
+				</field>
+			</group>
+			<group id="images" translate="label" type="text" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
+				<label>Images</label>
+				<attribute type="expanded">1</attribute>
+				<field id="image_type" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Image type</label>
+					<comment>Advanced: Size of the product images for exporting. Default is product_small_image.</comment>
+					<config_path>incomaker/images/image_type</config_path>
+				</field>
+			</group>
+			<group id="auto_generated_coupon_codes" translate="label" showInDefault="0" showInWebsite="1" showInStore="0" sortOrder="10">
+				<label>Auto Generated Specific Coupon Codes</label>
+				<field id="length" translate="label comment" type="text" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Code Length</label>
+					<comment>Excluding prefix, suffix and separators. Default is 12.</comment>
+					<frontend_class>validate-digits</frontend_class>
+					<config_path>incomaker/auto_generated_coupon_codes/length</config_path>
+				</field>
+				<field id="format" translate="label" type="select" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Code Format</label>
+					<source_model>Magento\SalesRule\Model\System\Config\Source\Coupon\Format</source_model>
+					<config_path>incomaker/auto_generated_coupon_codes/format</config_path>
+				</field>
+				<field id="prefix" translate="label" type="text" sortOrder="30" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Code Prefix</label>
+					<config_path>incomaker/auto_generated_coupon_codes/prefix</config_path>
+				</field>
+				<field id="suffix" translate="label" type="text" sortOrder="40" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Code Suffix</label>
+					<config_path>incomaker/auto_generated_coupon_codes/suffix</config_path>
+				</field>
+				<field id="dash" translate="label comment" type="text" sortOrder="50" showInDefault="0" showInWebsite="1" showInStore="0">
+					<label>Dash Every X Characters</label>
+					<comment>If empty no separation.</comment>
+					<frontend_class>validate-digits</frontend_class>
+					<config_path>incomaker/auto_generated_coupon_codes/dash</config_path>
+				</field>
+			</group>
+		</section>
+	</system>
 </config>

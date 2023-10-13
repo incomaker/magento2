@@ -151,7 +151,11 @@ to use different PHP version:
     bin/mgt-ssh
     alias php="/usr/bin/php7.4"
 
+### Troubleshooting
 
+#### 403 Forbidden
+
+This may be caused by not ending web working dir with `/pub`.
 
 ### Build and Deploy
 

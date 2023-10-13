@@ -2,6 +2,7 @@
 
 namespace Incomaker\Magento2\Observer;
 
+use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Async\EventAddContact\EventAddContactParam;
 use Incomaker\Magento2\Async\EventAddContact\EventAddContactPublisher;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
@@ -18,17 +19,23 @@ class ContactRegistration implements ObserverInterface {
 
 	private LoggerInterface $logger;
 
+	private DriverInterface $driver;
+
 	public function __construct(
 		EventAddContactPublisher $addContactPublisher,
 		EventUserPublisher $userPublisher,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		DriverInterface $driver
 	) {
 		$this->addContactPublisher = $addContactPublisher;
 		$this->userPublisher = $userPublisher;
 		$this->logger = $logger;
+		$this->driver = $driver;
 	}
 
 	public function execute(Observer $observer) {
+		if (!$this->driver->isModuleEnabled()) return;
+
 		try {
 			$customer = $observer->getData('customer');
 			$this->addContactPublisher->publish(new EventAddContactParam($customer->getId()));

@@ -1,1 +1,1 @@
-ssh -t root@127.0.0.1 "cd /home/cloudpanel/htdocs/incomaker.mgt && mgt-update"
+ssh -t root@127.0.0.1 "cd /home/cloudpanel/htdocs/${1:-incomaker}.mgt && mgt-update"

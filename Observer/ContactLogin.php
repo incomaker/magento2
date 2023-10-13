@@ -2,10 +2,10 @@
 
 namespace Incomaker\Magento2\Observer;
 
+use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
 use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Psr\Log\LoggerInterface;
@@ -14,25 +14,27 @@ class ContactLogin implements ObserverInterface {
 
 	private CheckoutSession $checkoutSession;
 
-	private CustomerSession $customerSession;
-
 	private EventUserPublisher $publisher;
 
 	private LoggerInterface $logger;
 
+	private DriverInterface $driver;
+
 	public function __construct(
 		EventUserPublisher $publisher,
 		CheckoutSession $checkoutSession,
-		CustomerSession $customerSession,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		DriverInterface $driver
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
-		$this->customerSession = $customerSession;
 		$this->logger = $logger;
+		$this->driver = $driver;
 	}
 
 	public function execute(Observer $observer) {
+		if (!$this->driver->isModuleEnabled()) return;
+
 		try {
 			$customer = $observer->getData('customer');
 			$this->publisher->publish(new EventUserParam('login', $customer->getId()));

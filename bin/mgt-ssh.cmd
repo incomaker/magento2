@@ -1,1 +1,1 @@
-docker compose exec -ti mgt-dev /bin/bash
+ssh -t root@127.0.0.1 "cd /home/cloudpanel/htdocs && bash --login"
