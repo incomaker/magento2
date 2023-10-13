@@ -2,6 +2,7 @@
 
 namespace Incomaker\Magento2\Controller\Data;
 
+use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Helper\ExportManager;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ActionInterface;
@@ -17,6 +18,7 @@ class Feed implements ActionInterface {
 	protected $pageFactory;
 	protected $fileFactory;
 	protected $manager;
+	private DriverInterface $driver;
 
 	/**
 	 * @param Context $context
@@ -28,12 +30,14 @@ class Feed implements ActionInterface {
 		Context $context,
 		RawFactory $pageFactory,
 		ScopeConfigInterface $scopeConfig,
-		ExportManager $manager
+		ExportManager $manager,
+		DriverInterface $driver
 	) {
 		$this->context = $context;
 		$this->pageFactory = $pageFactory;
 		$this->scopeConfig = $scopeConfig;
 		$this->manager = $manager;
+		$this->driver = $driver;
 	}
 
 	private function createResult($code, $content, $contentType = 'text/plain') {
@@ -45,8 +49,12 @@ class Feed implements ActionInterface {
 	}
 
 	public function execute() {
+		if (!$this->driver->isModuleEnabled()) {
+			return $this->createResult(503, "Incomaker module is disabled!");
+		}
+
 		$params = $this->context->getRequest()->getParams();
-		$exportType = $params["type"];
+		$exportType = isset($params["type"]) ? $params["type"] : null;
 
 		if (!$this->manager->exportExists($exportType)) {
 			return $this->createResult(WebApiException::HTTP_BAD_REQUEST, "Invalid feed type!");
