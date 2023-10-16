@@ -8,6 +8,7 @@ use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 class ContactLogin implements ObserverInterface {
@@ -16,18 +17,22 @@ class ContactLogin implements ObserverInterface {
 
 	private EventUserPublisher $publisher;
 
+	private SerializerInterface $serializer;
+
 	private LoggerInterface $logger;
 
 	private DriverInterface $driver;
 
 	public function __construct(
 		EventUserPublisher $publisher,
+		SerializerInterface $serializer,
 		CheckoutSession $checkoutSession,
 		LoggerInterface $logger,
 		DriverInterface $driver
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
+		$this->serializer = $serializer;
 		$this->logger = $logger;
 		$this->driver = $driver;
 	}
@@ -44,7 +49,7 @@ class ContactLogin implements ObserverInterface {
 			foreach ($quote->getAllVisibleItems() as $item) {
 				$cart[] = $item->getSku();
 			}
-			$this->checkoutSession->setLastCartState(serialize($cart));
+			$this->checkoutSession->setLastCartState($this->serializer->serialize($cart));
 		} catch (\Exception $e) {
 			$this->logger->error("Incomaker login event failed: " . $e->getMessage());
 		}

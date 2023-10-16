@@ -3,6 +3,7 @@
 namespace Incomaker\Magento2\Async;
 
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Psr\Log\LoggerInterface;
 
 abstract class PublisherBase extends AsyncBase {
@@ -14,9 +15,10 @@ abstract class PublisherBase extends AsyncBase {
 	public function __construct(
 		string $topicName,
 		PublisherInterface $publisher,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		SerializerInterface $serializer
 	) {
-		parent::__construct($logger);
+		parent::__construct($logger, $serializer);
 		$this->topicName = $topicName;
 		$this->publisher = $publisher;
 	}
