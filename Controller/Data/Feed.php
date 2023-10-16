@@ -2,6 +2,7 @@
 
 namespace Incomaker\Magento2\Controller\Data;
 
+use Incomaker\Api\Connector;
 use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Helper\ExportManager;
 use Magento\Framework\App\Action\Context;
@@ -9,7 +10,6 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Webapi\Exception as WebApiException;
-use Magento\Store\Model\ScopeInterface;
 
 class Feed implements ActionInterface {
 
@@ -60,7 +60,9 @@ class Feed implements ActionInterface {
 			return $this->createResult(WebApiException::HTTP_BAD_REQUEST, "Invalid feed type!");
 		}
 
-		if (!isset($params["key"]) || $this->scopeConfig->getValue('incomaker/settings/api_key', ScopeInterface::SCOPE_WEBSITE) != $params["key"]) {
+		$providedApiKey = isset($params["key"]) ? $params["key"] : null;
+		$actualApiKey = $this->driver->getSetting(Connector::INCOMAKER_API_KEY);
+		if ($providedApiKey == null || $actualApiKey == null || $providedApiKey != $actualApiKey) {
 			return $this->createResult(WebApiException::HTTP_BAD_REQUEST, "Invalid API key!");
 		}
 

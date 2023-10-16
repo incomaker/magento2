@@ -8,10 +8,10 @@ use Incomaker\Api\DriverInterface;
 class IncomakerDriver implements DriverInterface {
 
 	const CONFIG_KEY_MAP = [
-		Connector::INCOMAKER_ENABLED => 'incomaker/settings/enabled',
-		Connector::INCOMAKER_API_KEY => 'incomaker/settings/api_key',
-		Connector::INCOMAKER_ACCOUNT_ID => 'incomaker/settings/account_id',
-		Connector::INCOMAKER_PLUGIN_ID => 'incomaker/settings/plugin_id'
+		Connector::INCOMAKER_ENABLED => 'incomaker_config/settings/enabled',
+		Connector::INCOMAKER_API_KEY => 'incomaker_config/settings/api_key',
+		Connector::INCOMAKER_ACCOUNT_ID => 'incomaker_config/settings/account_id',
+		Connector::INCOMAKER_PLUGIN_ID => 'incomaker_config/settings/plugin_id'
 	];
 
 	/**
