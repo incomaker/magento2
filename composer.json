@@ -10,14 +10,14 @@
 		}
 	],
 	"require": {
-		"php": ">=7.4",
+		"php": "^7.4|^8.2",
 		"ext-simplexml": "*",
 		"ext-json": "*",
 		"incomaker/api": "^3.1.12",
-		"magento/framework": ">=103",
-		"magento/module-quote": ">=101",
-		"magento/module-customer": ">=103",
-		"magento/module-webapi-async": ">=100"
+		"magento/framework": "^103",
+		"magento/module-quote": "^101",
+		"magento/module-customer": "^103",
+		"magento/module-webapi-async": "^100"
 	},
 	"license": "GPL-3.0-or-later",
 	"autoload": {
