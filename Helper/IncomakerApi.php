@@ -13,11 +13,17 @@ use Psr\Log\LoggerInterface;
 class IncomakerApi {
 
 	private CookieManagerInterface $cookieManager;
+
 	private AddressRepositoryInterface $addressRepository;
+
 	private CustomerRepositoryInterface $customerRepository;
+
 	private Connector $incomaker;
+
 	private LoggerInterface $logger;
+
 	private $eventController;
+
 	private $contactController;
 
 	public function __construct(
@@ -142,4 +148,38 @@ class IncomakerApi {
 
 		$this->contactController->addContact($contact);
 	}
+
+	/**
+	 * Load Account and Plugin UUIDs for current API key.
+	 *
+	 * @return Object { accountUuid; pluginUuid; }
+	 */
+	public function getPluginInfo() {
+		return $this->incomaker
+			->createPluginController()
+			->getInfo();
+	}
+
+	/**
+	 * Load Account and Plugin UUIDs from Incomaker when those are empty and API key is set.
+	 */
+	public function checkPluginInfo() {
+		$this->logger->info("checking plugin info");
+		$apiKeySet = !empty($this->incomaker->getApiKey());
+		$valuesEmpty = (empty($this->incomaker->getAccountKey()) || empty($this->incomaker->getPluginKey()));
+
+		if ($apiKeySet && $valuesEmpty) {
+			$this->logger->info("loading plugin info");
+			$info = $this->getPluginInfo();
+			if (empty($info)) return;
+			$this->logger->info("BEFORE plugin uuid: " . $this->incomaker->getPluginKey());
+			$this->logger->info("loaded plugin ID: " . $info->pluginUuid);
+			$this->logger->info("loaded account ID: " . $info->accountUuid);
+			$this->incomaker->setPluginKey($info->pluginUuid);
+			$this->incomaker->setAccountKey($info->accountUuid);
+			$this->logger->info("AFTER plugin uuid: " . $this->incomaker->getPluginKey());
+			$this->logger->info("account uuid: " . $this->incomaker->getAccountKey());
+		}
+	}
+
 }
