@@ -6,7 +6,7 @@
 		<tab id="incomaker" translate="label" sortOrder="400">
 			<label>Incomaker</label>
 		</tab>
-		<section id="incomaker_config" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+		<section id="incomaker" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
 			<label>Marketing automation with artificial intelligence</label>
 			<tab>incomaker</tab>
 			<resource>Incomaker_Magento2::config</resource>
