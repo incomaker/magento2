@@ -3,7 +3,6 @@
 namespace Incomaker\Magento2\Block\Adminhtml\System\Config;
 
 use Incomaker\Api\Helper\JsonHelper;
-use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 

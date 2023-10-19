@@ -1,0 +1,3 @@
+php_version=${1}
+
+php${php_version} /usr/local/bin/composer update

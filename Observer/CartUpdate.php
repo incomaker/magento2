@@ -64,7 +64,7 @@ class CartUpdate implements ObserverInterface {
 				$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
 			}
 
-			$this->checkoutSession->setLastCartState(serialize($new_cart));
+			$this->checkoutSession->setLastCartState($this->serializer->serialize($new_cart));
 		} catch (\Exception $e) {
 			$this->logger->error("Incomaker cart update event failed: " . $e->getMessage());
 		}
