@@ -62,5 +62,4 @@ class CustomVariable extends Template {
 		return $this->driver->getSetting(Connector::INCOMAKER_PLUGIN_ID);
 	}
 
-
 }

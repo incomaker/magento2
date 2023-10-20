@@ -6,10 +6,10 @@ abstract class ParamBase {
 
 	public $eventName;
 
-	public \DateTime $time;
+	public $time;
 
 	public function __construct($eventName = 'default') {
-		$this->time = new \DateTime();
+		$this->time = (new \DateTime())->format("c");
 		$this->eventName = $eventName;
 	}
 

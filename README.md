@@ -140,6 +140,10 @@ After files are updated, you have to rebuild Magento DI:
 
 or simply `bin/mgt-update` from host or `mgt-update` from inside the container.
 
+#### Run Cron
+
+Use `bin/mgt-bash`, go into domain root folder and run `mgt-cron`.
+
 #### View Logs
 
     watch tail var/log/debug.log
@@ -156,6 +160,10 @@ to use different PHP version:
 #### 403 Forbidden
 
 This may be caused by not ending web working dir with `/pub`.
+
+#### Cron Job Not Running Message Queue Consumers
+
+Running cron doesn't work when using `docker compose exec`! Use `bin/mgt-bash`, go into domain root folder and run `mgt-cron`.
 
 ### Build and Deploy
 

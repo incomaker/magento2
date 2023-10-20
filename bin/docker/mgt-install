@@ -1,6 +1,6 @@
-instance_name=${1:-magento1}
+instance_name=${1:-test8}
 magento_version=${2:-*}
-php_version=${3}
+php_version=${3:-8.2}
 
 cd /home/cloudpanel/htdocs/
 rm ${instance_name}.mgt -rf

@@ -79,7 +79,7 @@ class IncomakerApi {
 		if (!$this->checkSettings()) return;
 
 		$event = new Event($eventName, $this->getPermId(), $time);
-		
+
 		if (!empty($customerId)) {
 			$event->setClientContactId($customerId);
 		}
@@ -92,7 +92,16 @@ class IncomakerApi {
 		if (!isset($this->eventController)) {
 			$this->eventController = $this->incomaker->createEventController();
 		}
-		$this->eventController->addEvent($event);
+		$this->logger->info("sending event " . print_r($event->getData(), true));
+		$this->logger->info("api key " . $this->incomaker->getApiKey());
+		$this->logger->info("account id " . $this->incomaker->getPluginKey());
+		$this->logger->info("plugin id " . $this->incomaker->getAccountKey());
+		try {
+			$this->eventController->addEvent($event);
+		} catch (\Exception $e) {
+			$this->logger->error("Error when sending event " . $e->getMessage());
+		}
+		$this->logger->info("event sent");
 	}
 
 	public function sendOrderEvent($event, $customerId, $total, $session, $time = null) {

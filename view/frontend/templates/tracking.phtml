@@ -8,16 +8,16 @@ if ($this->isModuleEnabled()) {
 	<?php
 
 	if ($this->getVariableValue("no_pixel") != '1') {
+		$platform = "https://incomaker.b-cdn.net/platforms/magento2.js";
 		$url = sprintf(
 			"https://dg.incomaker.com/tracking/resources/js/INlib.js?accountUuid=%s&pluginUuid=%s",
 			$this->getAccountId(),
 			$this->getPluginId(),
 		);
-		$platform = "https://incomaker.b-cdn.net/platforms/magento2.js";
 
 		?>
-			<script type="text/javascript" src="<?=$platform ?>"></script>
-			<script async type="text/javascript" data-inco-kid="" src="<?=$url ?>"></script>
+			<script defer type="text/javascript" src="<?=$platform ?>"></script>
+			<script defer type="text/javascript" data-inco-kid="" src="<?=$url ?>"></script>
 		<?php
 	}
 

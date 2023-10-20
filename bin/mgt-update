@@ -1,1 +1,1 @@
-docker compose exec -ti mgt-dev /bin/bash -c "cd /home/cloudpanel/htdocs/${1:-incomaker}.mgt && mgt-update"
+docker compose exec -ti mgt-dev /bin/bash -c "cd /home/cloudpanel/htdocs/${1:-test8}.mgt && mgt-update $2"

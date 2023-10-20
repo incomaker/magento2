@@ -25,4 +25,5 @@ abstract class ConsumerBase extends AsyncBase {
 	}
 
 	protected abstract function consume($param);
+
 }
