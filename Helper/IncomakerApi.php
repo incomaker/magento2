@@ -92,16 +92,8 @@ class IncomakerApi {
 		if (!isset($this->eventController)) {
 			$this->eventController = $this->incomaker->createEventController();
 		}
-		$this->logger->info("sending event " . print_r($event->getData(), true));
-		$this->logger->info("api key " . $this->incomaker->getApiKey());
-		$this->logger->info("account id " . $this->incomaker->getPluginKey());
-		$this->logger->info("plugin id " . $this->incomaker->getAccountKey());
-		try {
-			$this->eventController->addEvent($event);
-		} catch (\Exception $e) {
-			$this->logger->error("Error when sending event " . $e->getMessage());
-		}
-		$this->logger->info("event sent");
+
+		$this->eventController->addEvent($event);
 	}
 
 	public function sendOrderEvent($event, $customerId, $total, $session, $time = null) {
@@ -178,16 +170,10 @@ class IncomakerApi {
 		$valuesEmpty = (empty($this->incomaker->getAccountKey()) || empty($this->incomaker->getPluginKey()));
 
 		if ($apiKeySet && $valuesEmpty) {
-			$this->logger->info("loading plugin info");
 			$info = $this->getPluginInfo();
 			if (empty($info)) return;
-			$this->logger->info("BEFORE plugin uuid: " . $this->incomaker->getPluginKey());
-			$this->logger->info("loaded plugin ID: " . $info->pluginUuid);
-			$this->logger->info("loaded account ID: " . $info->accountUuid);
 			$this->incomaker->setPluginKey($info->pluginUuid);
 			$this->incomaker->setAccountKey($info->accountUuid);
-			$this->logger->info("AFTER plugin uuid: " . $this->incomaker->getPluginKey());
-			$this->logger->info("account uuid: " . $this->incomaker->getAccountKey());
 		}
 	}
 
