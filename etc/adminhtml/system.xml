@@ -16,15 +16,16 @@
 				<field id="module_version" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
 					<label>Module Version</label>
 					<frontend_model>Incomaker\Magento2\Block\Adminhtml\System\Config\ModuleVersion</frontend_model>
-					<comment>Select scope "Main Website" to edit Incomaker settings. If you are running multi-size installation, select scope of the website you wish to connect with Incomaker.</comment>
+					<comment>Select scope "Main Website" to edit Incomaker settings. If you are running multi-site installation, select scope of the website that you wish to connect with Incomaker.</comment>
 				</field>
 				<field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="0" showInWebsite="1" showInStore="0">
 					<label>Enable Incomaker</label>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+					<comment>Enable XML feeds, events and tracking.</comment>
 				</field>
 				<field id="api_key" translate="label comment" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
 					<label>API Key</label>
-					<comment>Copy API Key from Incomaker "E-shop Info" tab. Account ID and Plugin ID will be downloaded automatically if you API Key is correct.</comment>
+					<comment>Copy API Key from "E-shop Info" tab in your Incomaker account. Account ID and Plugin ID will be downloaded automatically if your API Key is correct.</comment>
 				</field>
 				<field id="account_id" translate="label" type="text" sortOrder="20" showInDefault="0" showInWebsite="1" showInStore="0">
 					<label>Account ID</label>
