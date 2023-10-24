@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Incomaker Module for Magento2</title>
+</head>
+<body>
+	<h3>Step 1</h3>
+	<p>Install module <b>Incomaker</b> for <b>Magento2</b> using standard procedure with <b>Composer</b>:</p>
+	<pre>
+composer require incomaker/magento2
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:flush
+	</pre>
+	<p>(you must be in folder where Magento is installed for this to work)</p>
+
+	<h3>Step 2</h3>
+	<p>Log into you administrator account, open <b>Stores</b> section and select <b>Configuration</b>:</p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/jT0baAAppwNWGBDb7UZx9a6wZ.png" width="544" />
+
+	<h3>Step 3</h3>
+	<p>In upper left corner of the screen, select configuration scope <b>Main Website</b>, alternatively select a specific website if you are running a multi-site installation:</p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/Y5giGYOSf6b4Z4KD1fwrOCGIa.png" width="463" />
+
+	<h3>Step 4</h3>
+	<p>Expand item <b>Incomaker</b>:</p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/eIKfRpHRzUDa2IacsUtFtVri4.png" width="447" />
+
+	<h3>Step 5</h3>
+	<p>To connect with Incomaker, fill in value of <b>API Key</b>:<br></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/L7fyJkfKKeB8nchuDuFpohBH8.png" width="733"/>
+
+	<h3>How to Obtain an API Key</h3>
+	<p>
+		You will get value of your <b>API Key</b>&nbsp;in your Incomaker account after clicking
+		<a href="https://my.incomaker.com/admin/plugin_profile.xhtml" target="_blank">Eshop info</a>.
+	</p>
+	<p>Open <a href="http://my.incomaker.com" target="_blank">my.incomaker.com</a></p>
+	<p>In upper right corner click on <b>Eshop info</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/JCb6Zm0SNe6LY9kCIFhzIfaO5.png" width="160" />
+	<p>Copy value of field labeled as <b>API key</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/cNEplTofgqkS6G5J39VDAuJvD.png" width="404" />
+	<p>Paste the value into Magento and save. If you entered correct value, <b>Account ID</b> and <b>Plugin ID</b> will be filled automatically.</p>
+	<p>Incomaker and Magento accounts are now connected and automatic data synchronization will follow.</p>
+</body>
+</html>

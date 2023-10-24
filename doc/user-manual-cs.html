@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Incomaker Module for Magento2</title>
+</head>
+<body>
+	<h3>Krok 1</h3>
+	<p>Nainstalujte si standardním způsobem modul <b>Incomaker</b> pro <b>Magento2</b> pomocí <b>Composeru</b>:</p>
+	<pre>
+composer require incomaker/magento2
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:flush
+	</pre>
+	<p>(musíte být ve složce, kde je nainstalováno Magento)</p>
+
+	<h3>Krok 2</h3>
+	<p>Přihlašte se přes administrátorský účet a přejděte k sekci <b>Stores</b>, kde zvolte možnost <b>Configuration:</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/jT0baAAppwNWGBDb7UZx9a6wZ.png" width="544" />
+
+	<h3>Krok 3</h3>
+	<p>V levé horní části obrazovky zvolte rozsah nastavení <b>Main Website</b>, případně můžete zvolit konkrétní web, pokud používáte multi-site instalaci:</p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/Y5giGYOSf6b4Z4KD1fwrOCGIa.png" width="463" />
+
+	<h3>Krok 4</h3>
+	<p>Otevřete v menu položku <b>Incomaker:</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/eIKfRpHRzUDa2IacsUtFtVri4.png" width="447" />
+
+	<h3>Krok 5</h3>
+	<p>Pro připojení Incomakeru vyplňte položku <b>API Key</b>:<br></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/L7fyJkfKKeB8nchuDuFpohBH8.png" width="733"/>
+
+	<h3>Jak získat API Key</h3>
+	<p>
+		Hodnotu Vašeho <b>API Key</b> naleznete ve svém Incomaker účtu po kliknutí na položku
+		<a href="https://my.incomaker.com/admin/plugin_profile.xhtml" target="_blank">Eshop info</a>.
+	</p>
+	<p>Otevřete stránku <a href="http://my.incomaker.com" target="_blank">my.incomaker.com</a></p>
+	<p>V pravém horním rohu klikněte na obrázek portrétu a zvolte možnost <b>Eshop info</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/JCb6Zm0SNe6LY9kCIFhzIfaO5.png" width="160" />
+	<p>Zkopírujte hodnotu políčka <b>API key</b></p>
+	<img style="border: dashed 1px darkgray; padding:5px" src="https://fs.incomaker.com/storage/uploads/cNEplTofgqkS6G5J39VDAuJvD.png" width="404" />
+	<p>Zkopírujte API Key do Magenta a uložte. Pokud jste vložili správnou hodnotu, políčka <b>Account ID</b> a <b>Plugin ID</b> se doplní automaticky.</p>
+	<p>Připojení Magenta je nyní hotové a následuje automatická synchronizace dat.</p>
+</body>
+</html>
