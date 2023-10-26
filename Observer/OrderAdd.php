@@ -8,6 +8,7 @@ use Incomaker\Magento2\Async\EventOrder\EventOrderPublisher;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 class OrderAdd implements ObserverInterface {
@@ -36,11 +37,16 @@ class OrderAdd implements ObserverInterface {
 		if (!$this->driver->isModuleEnabled()) return;
 
 		try {
-			$this->checkoutSession->unsLastCartState();
-			$quote = $this->checkoutSession->getQuote();
-			$quote->collectTotals();
-			$order = $observer->getOrder();
-			$param = new EventOrderParam('order_add', $order->getCustomerId(), $quote->getGrandTotal(), $quote->getId());
+			if (isset($this->checkoutSession)) $this->checkoutSession->unsLastCartState();
+			/**
+			 * @var $order Order
+			 */
+			$order = $observer->getEvent()->getData('order');
+			if (!($order instanceof Order)) {
+				$this->logger->error("Incomaker order_add event cannot be processed, because order is empty or of a wrong class!");
+				return;
+			}
+			$param = new EventOrderParam('order_add', $order->getCustomerId(), $order->getGrandTotal(), $order->getQuoteId());
 			$this->publisher->publish($param);
 		} catch (\Exception $e) {
 			$this->logger->error("Incomaker order_add failed: " . $e->getMessage());

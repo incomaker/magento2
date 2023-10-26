@@ -1,9 +1,5 @@
 version: '3'
 
-volumes:
-  dbdata:
-  paneldata:
-
 services:
 
   mgt-dev:
@@ -11,8 +7,6 @@ services:
     image: mgtcommerce/mgt-dev:v3
     restart: no
     volumes:
-      - dbdata:/var/lib/mysql
-      - paneldata:/home/cloudpanel
       - ./bin/docker:/usr/local/sbin
       - ./auth.json:/root/.config/composer/auth.json
     ports:

@@ -60,7 +60,7 @@ and paste Adobe keys into it.
 
 Run:
 
-    bin/mgt-dev
+    bin/mgt-start
 
 then go to UI: `https://localhost:8443/`
 
