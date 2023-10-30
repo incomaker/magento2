@@ -14,11 +14,12 @@ class EventProductParam extends ParamBase {
 
 	public function __construct(
 		$eventName,
+		$permId,
 		$customerId,
 		$productId,
 		$sessionId
 	) {
-		parent::__construct($eventName);
+		parent::__construct($eventName, $permId);
 		$this->customerId = $customerId;
 		$this->productId = $productId;
 		$this->sessionId = $sessionId;

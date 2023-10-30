@@ -5,6 +5,7 @@ namespace Incomaker\Magento2\Observer;
 use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Async\EventUser\EventUserParam;
 use Incomaker\Magento2\Async\EventUser\EventUserPublisher;
+use Incomaker\Magento2\Helper\IncomakerApi;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -23,18 +24,22 @@ class ContactLogin implements ObserverInterface {
 
 	private DriverInterface $driver;
 
+	private IncomakerApi $api;
+
 	public function __construct(
 		EventUserPublisher $publisher,
 		SerializerInterface $serializer,
 		CheckoutSession $checkoutSession,
 		LoggerInterface $logger,
-		DriverInterface $driver
+		DriverInterface $driver,
+		IncomakerApi $api
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
 		$this->serializer = $serializer;
 		$this->logger = $logger;
 		$this->driver = $driver;
+		$this->api = $api;
 	}
 
 	public function execute(Observer $observer) {
@@ -42,7 +47,7 @@ class ContactLogin implements ObserverInterface {
 
 		try {
 			$customer = $observer->getData('customer');
-			$this->publisher->publish(new EventUserParam('login', $customer->getId()));
+			$this->publisher->publish(new EventUserParam('login', $this->api->getPermId(), $customer->getId()));
 
 			$quote = $this->checkoutSession->getQuote();
 			$cart = [];

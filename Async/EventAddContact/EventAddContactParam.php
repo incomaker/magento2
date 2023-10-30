@@ -9,9 +9,10 @@ class EventAddContactParam extends ParamBase {
 	public $customerId;
 
 	public function __construct(
-		$customerId
+		$customerId,
+		$permId
 	) {
-		parent::__construct();
+		parent::__construct('default', $permId);
 		$this->customerId = $customerId;
 	}
 

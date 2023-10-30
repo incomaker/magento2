@@ -10,6 +10,6 @@ class EventAddContactConsumer extends ConsumerBase {
 	 * @param EventAddContactParam $param
 	 */
 	protected function consume($param) {
-		$this->incomakerApi->sendAddContactEvent($param->customerId);
+		$this->incomakerApi->sendAddContactEvent($param->customerId, $param->permId);
 	}
 }

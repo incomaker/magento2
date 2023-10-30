@@ -61,10 +61,10 @@ class IncomakerApi {
 		return $this->cookieManager->getCookie("incomaker_c");
 	}
 
-	public function sendUserEvent($event, $customerId, $time = null) {
+	public function sendUserEvent($event, $permId, $customerId, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($event, $this->getPermId(), $time);
+		$event = new Event($event, $permId, $time);
 
 		if (isset($customerId)) {
 			$event->setClientContactId($customerId);
@@ -75,10 +75,10 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function sendProductEvent($eventName, $customerId, $productId, $sessionId, $time = null) {
+	public function sendProductEvent($eventName, $permId, $customerId, $productId, $sessionId, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($eventName, $this->getPermId(), $time);
+		$event = new Event($eventName, $permId, $time);
 
 		if (!empty($customerId)) {
 			$event->setClientContactId($customerId);
@@ -96,10 +96,10 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function sendOrderEvent($event, $customerId, $total, $session, $time = null) {
+	public function sendOrderEvent($event, $permId, $customerId, $total, $session, $time = null) {
 		if (!$this->checkSettings()) return;
 
-		$event = new Event($event, $this->getPermId(), $time);
+		$event = new Event($event, $permId, $time);
 
 		if (isset($customerId)) {
 			$event->setClientContactId($customerId);
@@ -115,7 +115,7 @@ class IncomakerApi {
 		$this->eventController->addEvent($event);
 	}
 
-	public function sendAddContactEvent($customerId) {
+	public function sendAddContactEvent($customerId, $permId) {
 		if (!$this->checkSettings()) return;
 
 		if (!isset($this->contactController)) {
@@ -124,7 +124,7 @@ class IncomakerApi {
 
 		$customer = $this->customerRepository->getById($customerId);
 		$contact = new Contact($customer->getId());
-		$contact->setPermId($this->getPermId());
+		$contact->setPermId($permId);
 		$contact->setFirstName(htmlspecialchars($customer->getFirstname()));
 		$contact->setLastName(htmlspecialchars($customer->getLastname()));
 		$contact->setEmail($customer->getEmail());

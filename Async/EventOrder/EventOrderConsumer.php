@@ -10,6 +10,6 @@ class EventOrderConsumer extends ConsumerBase {
 	 * @param EventOrderParam $param
 	 */
 	protected function consume($param) {
-		$this->incomakerApi->sendOrderEvent($param->eventName, $param->customerId, $param->total, $param->sessionId, $param->time);
+		$this->incomakerApi->sendOrderEvent($param->eventName, $param->permId, $param->customerId, $param->total, $param->sessionId, $param->time);
 	}
 }

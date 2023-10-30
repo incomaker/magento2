@@ -5,6 +5,7 @@ namespace Incomaker\Magento2\Observer;
 use Incomaker\Api\DriverInterface;
 use Incomaker\Magento2\Async\EventProduct\EventProductParam;
 use Incomaker\Magento2\Async\EventProduct\EventProductPublisher;
+use Incomaker\Magento2\Helper\IncomakerApi;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -23,18 +24,22 @@ class CartUpdate implements ObserverInterface {
 
 	private DriverInterface $driver;
 
+	private IncomakerApi $api;
+
 	public function __construct(
 		EventProductPublisher $publisher,
 		CheckoutSession $checkoutSession,
 		SerializerInterface $serializer,
 		LoggerInterface $logger,
-		DriverInterface $driver
+		DriverInterface $driver,
+		IncomakerApi $api
 	) {
 		$this->publisher = $publisher;
 		$this->checkoutSession = $checkoutSession;
 		$this->logger = $logger;
 		$this->serializer = $serializer;
 		$this->driver = $driver;
+		$this->api = $api;
 	}
 
 	public function execute(Observer $observer) {
@@ -57,11 +62,11 @@ class CartUpdate implements ObserverInterface {
 			$removed = array_diff($old_cart, $new_cart);
 
 			foreach ($added as $addedSku) {
-				$this->publisher->publish(new EventProductParam('cart_add', $customerId, $addedSku, $quote->getId()));
+				$this->publisher->publish(new EventProductParam('cart_add', $this->api->getPermId(), $customerId, $addedSku, $quote->getId()));
 			}
 
 			foreach ($removed as $removedSku) {
-				$this->publisher->publish(new EventProductParam('cart_remove', $customerId, $removedSku, $quote->getId()));
+				$this->publisher->publish(new EventProductParam('cart_remove', $this->api->getPermId(), $customerId, $removedSku, $quote->getId()));
 			}
 
 			$this->checkoutSession->setLastCartState($this->serializer->serialize($new_cart));
