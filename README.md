@@ -198,4 +198,8 @@ Running cron doesn't work when using `docker compose exec`! Use `bin/mgt-bash`, 
 
 #### Package as ZIP
 
+Create a **zip** archive with plugin files:
+
     bin/module-package 1.1.4
+
+This is useful only when sending plugin for review.
