@@ -9,6 +9,7 @@ services:
     volumes:
       - ./bin/docker:/usr/local/sbin
       - ./auth.json:/root/.config/composer/auth.json
+      - ./ssl-certs:/etc/nginx/ssl-certificates/
     ports:
       - 80:80
       - 443:443

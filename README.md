@@ -43,7 +43,11 @@ This will create `vendor` folder with all dependencies which is useful for code 
 
 ### Set Up MGT - Development Environment
 
-Read about **MGT-DEV**: https://www.mgt-commerce.com/magento-2-local-development-environment
+Read about **MGT-DEV**:
+
+- https://www.mgt-commerce.com/docs/mgt-development-environment/introduction
+- https://www.mgt-commerce.com/magento-2-local-development-environment
+- https://www.mgt-commerce.com/tutorial/setup-magento-2-local-development-environment-with-docker/
 
 #### Access Keys
 
@@ -97,7 +101,7 @@ Install Magento:
         --session-save='files' --db-host='127.0.0.1' --db-name='incomaker' \
         --db-user='incomaker' --db-password='incomaker' \
         --base-url='http://incomaker.mgt/' --base-url-secure='https://incomaker.mgt/' \
-        --admin-user='admin' --admin-password='!admin123!' \
+        --admin-user='admin' --admin-password='admin123' \
         --admin-email='john@doe.com' --admin-firstname='John' --admin-lastname='Doe'
     chmod -R 777 /home/cloudpanel/htdocs/incomaker.mgt
 
@@ -122,9 +126,13 @@ Convenience script (does all of the above):
 
     bin/mgt-install <domain-name> <optional:magento-version> <optional:php-version>
 
-Example:
+Examples:
 
-     bin/mgt-install test7 2.4.3-p3 7.4
+    bin/mgt-install test8
+
+    bin/mgt-install test7 2.4.3-p3 7.4
+
+    bin/mgt-install test8.1 2.4.6 8.1
 
 #### Sync Files
 
@@ -155,6 +163,19 @@ to use different PHP version:
     bin/mgt-ssh
     alias php="/usr/bin/php7.4"
 
+#### Use Own SSL Certificate
+
+First, create a certificate authority and make your browser trust it.
+Then have it sign a certificate that is linked to your dev domain (ex. `test8.mgt`).
+You can use [certification-authority](https://gitlab.incomaker.com/it-administration/certification-authority) project  for those tasks.
+
+Now, go to **MGT Dev Env**, edit domain's VHost settings and put following lines pointing to your certificate:
+
+    ssl_certificate_key /etc/nginx/ssl-certificates/test8.mgt.key;
+    ssl_certificate /etc/nginx/ssl-certificates/test8.mgt.crt;
+
+Then restart MGT and your site should be trusted now.
+
 ### Troubleshooting
 
 #### 403 Forbidden
@@ -177,4 +198,4 @@ Running cron doesn't work when using `docker compose exec`! Use `bin/mgt-bash`, 
 
 #### Package as ZIP
 
-    bin/module-package
+    bin/module-package 1.1.4

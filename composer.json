@@ -2,7 +2,7 @@
 	"name": "incomaker/magento2",
 	"description": "Marketing automation with artificial intelligence",
 	"type": "magento2-module",
-	"version": "1.4.4",
+	"version": "1.4.5",
 	"authors": [
 		{
 			"name": "Incomaker",
@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"php": "^7.4|^8.2",
+		"php": "^7.4|^8.1|^8.2",
 		"ext-simplexml": "*",
 		"ext-json": "*",
 		"incomaker/api": "~3.2",
